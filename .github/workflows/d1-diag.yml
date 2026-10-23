@@ -18,11 +18,5 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: D1 rows read per hour since 2026-10-23
-        continue-on-error: true
-        run: node .github/diag/cf.mjs d1-hourly 2026-10-23
-      - name: Worker requests 2026-10-23 00:00-10:30 UTC, sampled (every third 10-minute slice)
-        continue-on-error: true
-        env:
-          STEP_MIN: 30
-        run: node .github/diag/cf.mjs logs 2026-10-23T00:00:00Z 2026-10-23T10:30:00Z
+      - name: Worker requests 2026-10-23 09:30-10:30 UTC, all 10-minute slices
+        run: node .github/diag/cf.mjs logs 2026-10-23T09:30:00Z 2026-10-23T10:30:00Z
