@@ -1,24 +1,25 @@
-name: D1 diagnostics (temporary)
+name: Edge rules (temporary)
+# Writes the zone's WAF rules with a token that has Zone WAF: Edit, kept as the secret CLOUDFLARE_ZONE_TOKEN.
 on:
   push:
     branches: [diag-workers-requests]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  diag:
+  rules:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      DB_ID: f1984775-849a-4277-805e-537ea5ad7611
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_ZONE_TOKEN }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Can the token manage zone WAF rules?
-        continue-on-error: true
-        run: node .github/diag/cf.mjs waf
-      - name: Worker requests 2026-10-23 10:00-10:30 UTC, raw asOrganization of list variants
-        run: node .github/diag/cf.mjs logs 2026-10-23T10:00:00Z 2026-10-23T10:30:00Z
+      - name: Dry run
+        run: node site/edge/rules.mjs --dry-run
+      - name: Write the rules
+        run: node site/edge/rules.mjs
