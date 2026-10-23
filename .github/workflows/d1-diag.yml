@@ -1,5 +1,4 @@
 name: Edge rules (temporary)
-# Writes the zone's WAF rules with a token that has Zone WAF: Edit, kept as the secret CLOUDFLARE_ZONE_TOKEN.
 on:
   push:
     branches: [diag-workers-requests]
@@ -7,30 +6,23 @@ on:
 permissions:
   contents: read
 jobs:
-  rules:
+  diag:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_ZONE_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      DB_ID: f1984775-849a-4277-805e-537ea5ad7611
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: main
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Is the zone token there?
-        id: token
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "::warning::The secret CLOUDFLARE_ZONE_TOKEN is not set: a token with Zone WAF: Edit and Zone: Read on ulehla.dev. Nothing was written."
-            echo "present=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Dry run
-        if: ${{ steps.token.outputs.present == 'true' }}
-        run: node site/edge/rules.mjs --dry-run
-      - name: Write the rules
-        if: ${{ steps.token.outputs.present == 'true' }}
-        run: node site/edge/rules.mjs
+      - name: D1 rows read per hour since 2026-10-23
+        continue-on-error: true
+        run: node .github/diag/cf.mjs d1-hourly 2026-10-23
+      - name: Worker requests since midnight, sampled
+        continue-on-error: true
+        env:
+          STEP_MIN: 60
+        run: node .github/diag/cf.mjs logs 2026-10-23T22:00:00Z 2026-10-24T12:00:00Z
