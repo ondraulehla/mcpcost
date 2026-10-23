@@ -101,6 +101,15 @@ function aggregate(events, label) {
     if (ts) { const d = new Date(Number(ts) || ts); if (!isNaN(d)) bump(byHour, d.toISOString().slice(0, 13)); }
   }
   top(byNetCls, 40, 'network × status × path × agent');
+  const raw = new Map();
+  for (const e of events) {
+    const url = find(e, (k) => k === 'url')[0]; if (!url || !/\/servers\?/.test(url)) continue;
+    const asn = find(e, (k) => k === 'asOrganization')[0] ?? '-';
+    const http = find(e, (k) => k === 'status').filter((v) => /^\d{3}$/.test(String(v)))[0] ?? '?';
+    const outcome = find(e, (k) => k === 'outcome')[0] ?? '-';
+    bump(raw, `asOrg=${JSON.stringify(asn)} http=${http} outcome=${outcome}`);
+  }
+  top(raw, 20, 'list variants: exact asOrganization × HTTP status × outcome');
   console.log('\n== per hour'); for (const [k, v] of [...byHour.entries()].sort()) console.log(`${k}  ${v}`);
   if (byMinute.size) { console.log('\n== per 10 minutes'); for (const [k, v] of [...byMinute.entries()].sort()) console.log(`${k}  ${v}`); }
 }
@@ -134,6 +143,18 @@ if (mode === 'zone') {
   const g = j.data?.viewer?.zones?.[0]?.httpRequestsAdaptiveGroups ?? [];
   console.log(`zone requests ${from} .. ${to}, top path × agent × network`);
   for (const r of g) console.log(`${String(r.count).padStart(7)}  ${r.dimensions.edgeResponseStatus}  ${r.dimensions.clientRequestPath.replace(/^\/s\/.*/, '/s/*').slice(0, 50).padEnd(50)}  ${ua(r.dimensions.userAgent).slice(0, 70).padEnd(70)}  ${r.dimensions.clientASNDescription}`);
+}
+
+if (mode === 'waf') {
+  const z = await cf('/zones?name=ulehla.dev');
+  const zone = z.result?.[0]?.id;
+  console.log('zone:', zone ? 'found' : JSON.stringify(z.errors ?? z).slice(0, 200));
+  if (zone) {
+    const rs = await cf(`/zones/${zone}/rulesets/phases/http_request_firewall_custom/entrypoint`);
+    console.log('custom rules entrypoint:', rs.success ? `${(rs.result?.rules ?? []).length} rules` : JSON.stringify(rs.errors).slice(0, 300));
+    const perm = await cf(`/user/tokens/verify`);
+    console.log('token:', JSON.stringify(perm.result ?? perm.errors).slice(0, 200));
+  }
 }
 
 if (mode === 'tail') {
