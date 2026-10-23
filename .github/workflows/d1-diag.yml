@@ -1,0 +1,28 @@
+name: D1 diagnostics (temporary)
+# Where the Workers request budget went on 2026-10-23. Prints aggregates only: no IPs, no query values.
+on:
+  push:
+    branches: [diag-workers-requests]
+permissions:
+  contents: read
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      DB_ID: f1984775-849a-4277-805e-537ea5ad7611
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: D1 rows read per hour since 2026-10-23
+        continue-on-error: true
+        run: node .github/diag/cf.mjs d1-hourly 2026-10-23
+      - name: Worker requests 2026-10-23 00:00-10:30 UTC, sampled (every third 10-minute slice)
+        continue-on-error: true
+        env:
+          STEP_MIN: 30
+        run: node .github/diag/cf.mjs logs 2026-10-23T00:00:00Z 2026-10-23T10:30:00Z
