@@ -18,11 +18,26 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: D1 rows read per hour since 2026-10-23
+      - name: Both sites as a browser gets them
         continue-on-error: true
-        run: node .github/diag/cf.mjs d1-hourly 2026-10-23
-      - name: Worker requests since midnight, sampled
+        run: |
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          for u in https://ulehla.dev/ https://mcpcost.ulehla.dev/ https://ulehla.dev/robots.txt https://ulehla.dev/sitemap-index.xml https://ulehla.dev/sitemap-0.xml https://mcpcost.ulehla.dev/robots.txt https://mcpcost.ulehla.dev/sitemap.xml https://mcpcost.ulehla.dev/sitemap-pages.xml https://mcpcost.ulehla.dev/servers "https://mcpcost.ulehla.dev/servers?status=ok"; do
+            echo; echo "######## $u"
+            curl -sS -A "$UA" -D - "$u" -o body.tmp | tr -d '\r' | grep -i -E "^HTTP|content-type|cache-control|x-robots|cf-mitigated|cf-cache|x-cache|^link:"
+            echo "---- head"
+            tr -d '\r' < body.tmp | sed 's/></>\n</g' | grep -i -E "<title|<meta name=\"(description|robots|google|msvalidate)|<link rel=\"canonical|<html|ld\+json|<h1|<loc>" | head -25
+          done
+      - name: A fake Googlebot from a cloud address asking for a list variant
+        continue-on-error: true
+        run: curl -sS -A "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" -D - -o /dev/null "https://mcpcost.ulehla.dev/servers?status=ok" | tr -d '\r' | grep -i -E "^HTTP|cf-mitigated"
+      - name: Worker requests since the zone rules went live at 10:50 UTC
         continue-on-error: true
         env:
-          STEP_MIN: 60
-        run: node .github/diag/cf.mjs logs 2026-10-23T22:00:00Z 2026-10-24T12:00:00Z
+          STEP_MIN: 20
+        run: node .github/diag/cf.mjs logs 2026-10-23T10:50:00Z "$(date -u +%FT%TZ)"
+      - name: What the zone saw, with the zone token
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_ZONE_TOKEN }}
+        run: node .github/diag/cf.mjs zone 2026-10-23T10:50:00Z "$(date -u +%FT%TZ)"
