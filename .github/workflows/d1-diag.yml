@@ -1,5 +1,4 @@
 name: D1 diagnostics (temporary)
-# Where the Workers request budget went on 2026-10-23. Prints aggregates only: no IPs, no query values.
 on:
   push:
     branches: [diag-workers-requests]
@@ -18,5 +17,8 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Worker requests 2026-10-23 09:30-10:30 UTC, all 10-minute slices
-        run: node .github/diag/cf.mjs logs 2026-10-23T09:30:00Z 2026-10-23T10:30:00Z
+      - name: Can the token manage zone WAF rules?
+        continue-on-error: true
+        run: node .github/diag/cf.mjs waf
+      - name: Worker requests 2026-10-23 10:00-10:30 UTC, raw asOrganization of list variants
+        run: node .github/diag/cf.mjs logs 2026-10-23T10:00:00Z 2026-10-23T10:30:00Z
