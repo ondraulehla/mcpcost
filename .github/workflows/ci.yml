@@ -13,6 +13,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # The release workflow runs the same check; here a version that is not in all five files fails before a release.
+      - run: node scripts/version.mjs --check
       - run: npx tsc -p packages/mcpcost/tsconfig.json --noEmit
       - run: npm test --workspaces --if-present
       - run: node --test ".github/actions/*.test.mjs"

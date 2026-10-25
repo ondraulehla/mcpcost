@@ -233,6 +233,34 @@ To redirect those as well, with no Worker invocation at all, add a Redirect Rule
 
 Redirect Rules run before the Worker and before static assets, so the rule covers every path. The middleware stays as the fallback for the workers.dev host, which the zone rule does not see.
 
+## Releases
+
+A tag `v0.Y.Z` starts the Release workflow (`.github/workflows/release.yml`). It checks that the version in the five files is the version of the tag (`node scripts/version.mjs --check`), runs the tests and `npm run check -w site`, and packs the package. Then it publishes the package to npm with provenance, publishes `site/server.json` to the MCP registry and makes the GitHub release. It needs no npm token, no OTP and no `mcp-publisher login`: npm trusts the workflow file (trusted publishing), and the registry takes the GitHub OIDC token of the run.
+
+One time, on npmjs.com. Do it on the day of the first release: a new trusted publisher expires when it does not publish within 2 days.
+
+1. Open the package `mcpcost`, then Settings. In the Trusted Publisher section, select GitHub Actions.
+2. Organization or user: `ondraulehla`. Repository: `mcpcost`. Workflow filename: `release.yml`. Environment name: empty.
+3. Under Allowed actions, allow `npm publish`. A trusted publisher made after 2026-09-03 allows only `npm stage publish`, and a staged version waits for an approval with 2FA.
+4. Save. The same from the shell, with npm 11.15.0 or later and 2FA: `npm trust github mcpcost --file release.yml --repo ondraulehla/mcpcost --allow-publish`.
+
+After the first release, Settings, Publishing access, "Require two-factor authentication and disallow tokens" stops all publishes with a token. The workflow continues to publish.
+
+A release:
+
+```bash
+node scripts/version.mjs patch       # or minor, or 0.3.5: sets the version in the five files
+git commit -am "mcpcost 0.3.5: …"    # the message of this commit becomes the release notes
+git push origin main
+git tag v0.3.5 && git push origin v0.3.5
+```
+
+- To test the setup before the tag: Actions, Release, Run workflow, with the "Dry run" box selected. It runs the checks, `npm publish --dry-run` and the registry login, and publishes nothing. The warning "npm did not accept this workflow" means that the trusted publisher on npmjs.com does not match. The dry run does not check the allowed actions.
+- An annotated tag (`git tag -a v0.3.5 -m "…"`) gives its message as the release notes.
+- When a run fails, run the failed jobs again. Each publish step skips a version that npm or the registry has already.
+- A run from main without "Dry run" is a release without a tag push: the release makes the tag on that commit.
+- A package release is never the Latest release (`--latest=false`). So the Latest release of the repository stays the release of the GitHub Action (v1.1.0), which its Marketplace page shows. The Action has its own releases, v1.x.y, published to the Marketplace from the release form on GitHub, and its tag `v1` moves to the newest one. The workflow does not touch them. Only a tag v0.Y.Z starts it, so the package stays below 1.0.0 until it has a tag scheme of its own.
+
 ## Licence
 
 MIT
