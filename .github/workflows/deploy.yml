@@ -6,16 +6,31 @@ on:
       - 'site/**'
       # The edge scripts run in their own workflows and change nothing the Worker serves.
       - '!site/edge/**'
+      # The site imports the probe code of the package, so a change there deploys the site too. The deploy after a
+      # probe run (below) builds main as it is, the same as a manual run.
+      - 'packages/mcpcost/src/**'
+      - 'probe/evidence-latest.ts'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy.yml'
+  # After each successful probe run, the same site with that run's re-check evidence (see the evidence step).
+  workflow_run:
+    workflows: ['Daily probe']
+    types: [completed]
   workflow_dispatch:
-concurrency:
-  group: deploy
-  cancel-in-progress: true
+permissions:
+  contents: read
+  actions: read # the evidence step lists the probe runs and downloads their artifacts
 jobs:
   deploy:
+    # A probe run that failed or was cancelled made no evidence that the site serves.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    # On the job, not the workflow: a job that its if skips never joins the group, so it cannot take the place of a
+    # deploy that waits there. A push or a manual deploy replaces the deploy in progress; one after a probe run waits.
+    concurrency:
+      group: deploy
+      cancel-in-progress: ${{ github.event_name != 'workflow_run' }}
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -26,7 +41,39 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Put the newest re-check evidence into public/data
+        # The probe keeps evidence.json.gz of each run as the artifact evidence-<run id>. The file is not in git (1.6 MB a
+        # day), so every deploy puts it in again: a deploy without it takes /data/mcpcost-evidence-latest.json.gz off the site.
+        # probe/evidence-latest.ts refuses a file that is not whole. After a probe run only that run's file counts; when it
+        # has none (a sample run), nothing is deployed. A push or a manual run takes the newest whole file of the last ten
+        # successful probe runs, else the copy that the site serves now. This step never stops the deploy of a push.
+        id: evidence
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRIGGER: ${{ github.event.workflow_run.id }}
+        run: |
+          dir="${RUNNER_TEMP:?}/evidence"
+          take() {
+            rm -rf "$dir"
+            gh run download "$1" --name "evidence-$1" --dir "$dir" 2>/dev/null || return 1
+            node --import tsx probe/evidence-latest.ts --in "$(find "$dir" -name evidence.json.gz | head -1)" --out site/public/data --run "$1"
+          }
+          if [ -n "$TRIGGER" ]; then
+            take "$TRIGGER" && echo "run=$TRIGGER" >> "$GITHUB_OUTPUT" || echo "::notice::Probe run $TRIGGER has no whole evidence artifact (a sample run makes none), so the site is not deployed again."
+            exit 0
+          fi
+          for id in $(gh run list --workflow "Daily probe" --status success --limit 10 --json databaseId -q '.[].databaseId'); do
+            take "$id" && { echo "run=$id" >> "$GITHUB_OUTPUT"; exit 0; }
+          done
+          echo "::warning::No recent probe run has a whole evidence artifact, so the deploy takes the file that the site serves now."
+          live=https://mcpcost.ulehla.dev/data/mcpcost-evidence-latest
+          mkdir -p "$dir"
+          curl -fsS --retry 3 -o "$dir/live.json.gz" "$live.json.gz"
+          run=$(curl -fsS --retry 3 "$live.index.json" | jq -r '.run_id // empty')
+          node --import tsx probe/evidence-latest.ts --in "$dir/live.json.gz" --out site/public/data ${run:+--run "$run"}
       - name: Build
+        if: ${{ github.event_name != 'workflow_run' || steps.evidence.outputs.run != '' }}
         working-directory: site
         run: npm run build
       - name: Apply the schema and the pending migrations
@@ -34,7 +81,8 @@ jobs:
         # D1 refuses every query once the free tier's rows for the day are spent. The code deploys anyway, so a fix for that
         # goes out the same day; the next deploy or the daily probe applies what is pending. The site reads every column
         # with SELECT * and checks its indexes, so it runs on a database a migration behind.
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        # After a probe run there is nothing to apply: the probe applies them itself before its import.
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && github.event_name != 'workflow_run' }}
         continue-on-error: true
         working-directory: site
         run: |
@@ -52,10 +100,9 @@ jobs:
           idx=$(npx wrangler d1 execute mcp-pulse --remote --json --command "SELECT count(*) AS n FROM sqlite_master WHERE type='index' AND name='servers_init_name'" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s)[0].results[0].n))')
           if [ "$idx" != "0" ]; then npx wrangler d1 execute mcp-pulse --remote --file=migrations/006-fewer-indexes.sql; echo "migration 006 applied"; fi
       - name: Deploy
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && (github.event_name != 'workflow_run' || steps.evidence.outputs.run != '') }}
         working-directory: site
         run: npx wrangler deploy
       - name: Say when the deploy was skipped
         if: ${{ env.CLOUDFLARE_API_TOKEN == '' }}
         run: echo "::notice::CLOUDFLARE_API_TOKEN is not set, so the site was built but not deployed."
-

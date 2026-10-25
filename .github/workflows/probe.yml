@@ -117,6 +117,7 @@ jobs:
         # One row per probed server, the numbers the board shows, CC BY 4.0, plus the same run as re-check evidence for the registry
         # (modelcontextprotocol/registry#1715). The monthly report publishes both as static files:
         # node --import tsx probe/dataset.ts --publish site/public/data/mcpcost-YYYY-MM.json.gz --publish-evidence site/public/data/mcpcost-evidence-YYYY-MM.json.gz, then commit them.
+        # The evidence of every successful run also goes out as /data/mcpcost-evidence-latest.json.gz, see "Keep the re-check evidence for the site".
         if: ${{ inputs.sample == '' }}
         run: node --import tsx probe/dataset.ts --in data/latest --out data/latest
       - name: Find the open-source packages of servers that need auth
@@ -171,6 +172,17 @@ jobs:
             data/latest/dataset.json.gz
           retention-days: 90
           compression-level: 9
+      - name: Keep the re-check evidence for the site
+        # When this run has succeeded, deploy.yml puts the file on the site as /data/mcpcost-evidence-latest.json.gz.
+        # A failed upload must not fail the run; the site then keeps the evidence of the run before.
+        if: ${{ inputs.sample == '' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ github.run_id }}
+          path: data/latest/evidence.json.gz
+          retention-days: 30
+          compression-level: 0
       - name: Tell IndexNow which pages changed
         if: ${{ inputs.sample == '' && env.CLOUDFLARE_API_TOKEN != '' }}
         env:

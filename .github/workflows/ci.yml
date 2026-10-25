@@ -16,6 +16,7 @@ jobs:
       - run: npx tsc -p packages/mcpcost/tsconfig.json --noEmit
       - run: npm test --workspaces --if-present
       - run: node --test ".github/actions/*.test.mjs"
+      - run: node --import tsx --test "probe/*.test.ts"
       - run: npm run build -w site
       - run: npm run check -w site
   action:

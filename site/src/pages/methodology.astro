@@ -103,6 +103,7 @@ Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=8640
   <p>
     Each server has JSON at <code>/api/s/&lt;name&gt;.json</code>. The list is at <code>/api/servers.json</code>. The live probe is at <code>/api/check.json?url=…</code>. The run summary is at <code>/api/summary.json</code>.
     The board is also an MCP server: <code>https://mcpcost.ulehla.dev/mcp</code> over Streamable HTTP, no auth. Its tools are <code>lookup_server</code>, <code>search_servers</code>, <code>check_server</code> and <code>registry_summary</code>. <a href="/llms.txt">/llms.txt</a> lists all of this.
+    The newest run as re-check evidence for the registry, in the row shape agreed in <a href="https://github.com/modelcontextprotocol/registry/issues/1715" rel="noopener">registry issue #1715</a>, is at <code>/data/mcpcost-evidence-latest.json.gz</code>. It changes after each daily run, and <code>/data/mcpcost-evidence-latest.index.json</code> gives its run date, number of rows and size.
   </p>
   </section>
 

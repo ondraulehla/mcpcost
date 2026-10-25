@@ -17,3 +17,4 @@ data/latest/dataset.json
 data/latest/dataset.json.gz
 data/latest/evidence.json
 data/latest/evidence.json.gz
+site/public/data/mcpcost-evidence-latest.*
