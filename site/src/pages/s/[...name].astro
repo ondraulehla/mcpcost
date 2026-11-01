@@ -177,30 +177,55 @@ if (server.host === 'server.smithery.ai' || server.host.endsWith('.run.tools')) 
   const ended = new Date().toISOString().slice(0, 10) >= '2026-10-31';
   hints.unshift(`Smithery ${ended ? 'stopped' : 'stops'} its MCP connection proxy on 31 October 2026. URLs on server.smithery.ai and run.tools ${ended ? 'do not work any more' : 'stop working then'}. Publish a new version of the registry entry with the server's own URL.`);
 }
+// The title and the first sentence answer the question people type into a search box: "is the X MCP server down".
+// The subject names the server the way a person does ("Linear MCP server"), with the registry name as the fallback.
+// Titles from the registry are not unique, so the page title adds what is: the registry name, or a catalog server's host.
+// A title's tagline ("Arcmira: YouTube Transcript Search", "Linear - issues and projects") stays out of the sentence.
+const plainTitle = server.title?.split(/\s*[:|\u2013\u2014]\s+|\s+-\s+/)[0].replace(/\s*(mcp\s*server|mcp)\s*$/i, '').trim() || null;
+const subject = plainTitle ? `${plainTitle} MCP server` : `${name} MCP server`;
+const titleSubject = plainTitle ? `${subject} (${listed || bundled ? server.host : name})` : subject;
+const http = server.http_status ? ` (HTTP ${server.http_status})` : '';
 const pageTitle = ok
-  ? `${who}: ${num(cost)} tokens of context${exact ? ` in ${model}` : ''}, ${num(server.tool_count)} tools, alive`
+  ? `${titleSubject} status: alive, ${num(cost)} tokens of context${exact ? ` in ${model}` : ''}, ${num(server.tool_count)} tools`
   : pinned
-    ? `${who}: needs mcp<2, ${num(pinnedCost)} tokens of context${pinnedExact ? ` in ${model}` : ''}, ${num(server.tool_count)} tools`
+    ? `${titleSubject} status: needs mcp<2, ${num(pinnedCost)} tokens of context${pinnedExact ? ` in ${model}` : ''}, ${num(server.tool_count)} tools`
     : derived
-      ? `${who}: ${label(server.status)}, ${num(derived.cost)} tokens of context from the publisher's package, ${num(derived.tools)} tools`
-      : `${who}: ${label(server.status)}`;
-const answer = ok
+      ? `${titleSubject} status: ${label(server.status)}, ${num(derived.cost)} tokens of context from the publisher's package, ${num(derived.tools)} tools`
+      : server.status === 'rate_limited'
+        ? `${titleSubject} status: up, rate limited (HTTP 429)`
+        : group === 'down'
+          ? `${titleSubject} status: down since ${date(failingSince)}, ${label(server.status)}`
+          : group === 'noanswer'
+            ? `${titleSubject} status: no valid answer today, ${label(server.status)}`
+            : `${titleSubject} status: ${label(server.status)}`;
+/** One sentence that answers "is it down?" for today, from the latest probe. Null for a server the probe does not call. */
+const lead = ok
+  ? `Is the ${subject} down? No. It answered initialize and tools/list in the probe of ${date(server.probed_at)}.`
+  : pinned
+    ? `Is the ${subject} down? No. Installed with mcp<2, it started and listed its tools on ${date(server.probed_at)}.`
+    : group === 'gated'
+      ? `Is the ${subject} down? No. It is up and ${label(server.status)}${http}, probed ${date(server.probed_at)}.`
+      : server.status === 'rate_limited'
+        ? `Is the ${subject} down? No. It answered HTTP 429 on ${date(server.probed_at)}: it limits the probe's requests, so the board does not count it as down.`
+        : group === 'down'
+          ? `Is the ${subject} down? Yes. It has given no valid answer since ${date(failingSince)}: ${label(server.status)}${http}.`
+          : group === 'noanswer'
+            ? `Is the ${subject} down? It gave no valid answer in the probe of ${date(server.probed_at)}: ${label(server.status)}${http}. One failed probe is not an outage.`
+            : null;
+const detail = ok
   ? exact
     ? `${who} costs ${num(server.claude_tokens)} tokens of context per session in ${model}. In Claude Code it costs ${num(server.claude_tokens_cc ?? server.claude_tokens)} tokens. It has ${num(server.tool_count)} tool definitions. That is ${share} % of a 200k window. Measured ${date(server.claude_measured_at ?? server.probed_at)}.`
     : `${who} costs about ${num(server.tools_tokens)} tokens of context per session (o200k_base estimate${server.claude_error ? ', Claude refused the schema' : ''}). It has ${num(server.tool_count)} tool definitions. That is ${share} % of a 200k window. Measured ${date(server.probed_at)}.`
   : pinned
-    ? `${who} does not start from a plain install: it imports FastMCP, which mcp 2.0 renamed. Installed with mcp<2, it starts, and its ${num(server.tool_count)} tool definitions cost ${num(pinnedCost)} tokens of context per session${pinnedExact ? ` in ${model}` : ' (o200k_base estimate)'}. Measured ${date(server.claude_measured_at && server.claude_measured_at > server.probed_at ? server.claude_measured_at : server.probed_at)}.`
+    ? `${who} does not start from a plain install: it imports FastMCP, which mcp 2.0 renamed. Its ${num(server.tool_count)} tool definitions cost ${num(pinnedCost)} tokens of context per session${pinnedExact ? ` in ${model}` : ' (o200k_base estimate)'}. Measured ${date(server.claude_measured_at && server.claude_measured_at > server.probed_at ? server.claude_measured_at : server.probed_at)}.`
   : derived
-    ? `${who} needs auth, so the daily probe cannot list its tools. The publisher's package ${derived.name} has ${num(derived.tools)} tool definitions that cost ${num(derived.cost)} tokens of context per session${derived.exact ? ` in ${derivedModel}` : ' (o200k_base estimate)'}, ${derivedShare} % of a 200k window. The tool definitions were read from the open-source package in a container, not from the authenticated server. Measured ${date(derived.probedAt)}.`
+    ? `The daily probe cannot list its tools. The publisher's package ${derived.name} has ${num(derived.tools)} tool definitions that cost ${num(derived.cost)} tokens of context per session${derived.exact ? ` in ${derivedModel}` : ' (o200k_base estimate)'}, ${derivedShare} % of a 200k window. The tool definitions were read from the open-source package in a container, not from the authenticated server. Measured ${date(derived.probedAt)}.`
     : server.status === 'needs_url'
       ? `${who} has only URL templates in the official MCP registry: each user fills in an address of their own, so the probe does not call it.`
       : server.status === 'unprobed'
         ? `${who} is in the official MCP registry. ${server.error ?? 'The probe does not run it yet.'}`
-      : group === 'down'
-        ? `${who} has given no valid answer since ${date(failingSince)}. Result: ${label(server.status)}${server.http_status ? ` (HTTP ${server.http_status})` : ''}.`
-        : group === 'noanswer'
-          ? `${who} gave no valid answer in the probe of ${date(server.probed_at)}. Result: ${label(server.status)}${server.http_status ? ` (HTTP ${server.http_status})` : ''}. One failed probe is not an outage.`
-          : `${who}: ${label(server.status)}${server.http_status ? ` (HTTP ${server.http_status})` : ''}, probed ${date(server.probed_at)}.`;
+        : null;
+const answer = [lead, detail].filter(Boolean).join(' ') || `${who}: ${label(server.status)}${http}, probed ${date(server.probed_at)}.`;
 const pageUrl = `${site}/s/${name}`;
 const jsonld = {
   '@context': 'https://schema.org',
@@ -234,7 +259,8 @@ const jsonld = {
 <Layout title={pageTitle} description={answer} jsonld={jsonld} robots={robots} feed={{ href: `/s/${name}.xml`, title: `${name} on mcpcost` }}>
   <p class="kicker mono">{name}</p>
   <h1 class="poster">{heading}</h1>
-  {server.description && <p class="lede">{server.description}</p>}
+  {lead && <p class="lede">{lead}</p>}
+  {server.description && <p class={lead ? 'muted' : 'lede'}>{server.description}</p>}
 
   <p style="margin-top:22px">
     <span class={`tag big ${group}`}>{label(server.status)}</span>
