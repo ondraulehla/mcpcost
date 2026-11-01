@@ -8,6 +8,8 @@ export interface Report {
   title: string;
   /** The day of the run the report and the dataset are built from (ISO date). */
   run: string;
+  /** The day the page first went out (ISO date): datePublished in the JSON-LD; dateModified is the run day. */
+  published: string;
   /** The first full run the report compares against (ISO date). */
   from: string;
   /** The dataset: a static file of the site, gzip of a JSON document, CC BY 4.0. */
@@ -20,10 +22,11 @@ export const REPORTS: Report[] = [
   {
     month: '2026-10',
     title: 'The state of the MCP registry, October 2026',
-    run: '2026-10-24',
+    run: '2026-10-31',
+    published: '2026-10-24',
     from: '2026-10-03',
-    dataset: { path: '/data/mcpcost-2026-10.json.gz', size: '1.2 MB' },
-    evidence: { path: '/data/mcpcost-evidence-2026-10.json.gz', size: '1.8 MB' }
+    dataset: { path: '/data/mcpcost-2026-10.json.gz', size: '1.6 MB' },
+    evidence: { path: '/data/mcpcost-evidence-2026-10.json.gz', size: '2.1 MB' }
   }
 ];
 

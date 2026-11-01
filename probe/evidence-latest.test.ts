@@ -67,7 +67,7 @@ test('a file over the size limit is refused', () => {
 const monthly = new URL('../site/public/data/mcpcost-evidence-2026-10.json.gz', import.meta.url);
 test('the published October file passes', { skip: !existsSync(monthly) }, () => {
   const index = indexOf(readFileSync(monthly));
-  assert.equal(index.run, '2026-10-24');
-  assert.equal(index.entries, 46137);
+  assert.equal(index.run, '2026-10-31');
+  assert.equal(index.entries, 51736);
   assert.equal(Object.values(index.states).reduce((a, b) => a + b, 0), index.entries);
 });
