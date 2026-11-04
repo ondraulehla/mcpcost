@@ -6,6 +6,10 @@
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
+  // Smart Placement: the Worker runs near D1 in one region instead of in every data centre a request lands in.
+  // Isolates stay warm (a cold render costs 12 to 20 ms of CPU, a warm one 3 to 8) and one Cache API serves every
+  // request, so a crawler's second visit to a page in a day is a hit. Measured with watch.yml from 2026-11-04.
+  "placement": { "mode": "smart" },
   "version_metadata": { "binding": "CF_VERSION_METADATA" },
   "workers_dev": true,
   // Alert mails after the daily run; the handler is idempotent, so three runs a day cost nothing extra.
