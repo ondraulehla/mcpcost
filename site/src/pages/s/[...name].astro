@@ -1,13 +1,23 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { serverPage, listingsOf, bundleOf } from '../../lib/db';
+import { serverPage, similarByTitle, listingsOf, bundleOf } from '../../lib/db';
 import { bucket, label, ms, num, tokens, date, windowShare, modelName } from '../../lib/format';
 
 const name = Astro.params.name ?? '';
 // One round trip for the row, its history, its siblings, whether it ever answered, and the latest run.
-const { server, history, siblings, everAnswered, run } = await serverPage(name);
+const { server, history, siblings, everAnswered, run, onHost, word, ...related } = await serverPage(name);
 if (!server) {
   return new Response('Not found', { status: 404 });
+}
+// The links to other servers. A name whose word finds fewer than three gets one more look, by the words of the title.
+let similar = related.similar;
+let similarWords = word && similar.length ? [word] : [];
+if (similar.length < 3) {
+  const byTitle = await similarByTitle(server.title, server.description, name, new Set([...onHost, ...similar].map((s) => s.name)), word ? [word] : []);
+  if (byTitle.similar.length) {
+    similar = [...similar, ...byTitle.similar].slice(0, 8);
+    similarWords = [...similarWords, ...byTitle.words];
+  }
 }
 // A day at the edge: the data change once a day, and a crawl that reads every server page costs the Worker one request per page per colo, not one every three hours.
 Astro.response.headers.set('cache-control', 'public, max-age=300, s-maxage=86400');
@@ -372,6 +382,28 @@ const jsonld = {
         {siblings.map((s) => <li><a href={`/s/${s.name}`}>{s.name}</a> <span class="faint mono">{s.host}</span></li>)}
         {(server.toolset_siblings ?? 0) > siblings.length && <li class="muted">and {num((server.toolset_siblings ?? 0) - siblings.length)} more</li>}
       </ul>
+    </section>
+  )}
+
+  {(onHost.length > 0 || similar.length > 0) && (
+    <section class="panel" aria-labelledby="more-h">
+      <h2 id="more-h" class="panel-title">More servers</h2>
+      {onHost.length > 0 && (
+        <>
+          <p class="muted small">Other registry entries on <span class="mono">{server.host}</span>{(onHost.length >= 8) && <>, the ones next to this name; <a href={`/servers?host=${encodeURIComponent(server.host)}`}>all of them</a></>}.</p>
+          <ul>
+            {onHost.map((s) => <li><a href={`/s/${s.name}`} class="break">{s.title ?? s.name}</a>{s.title && <> <span class="faint mono">{s.name}</span></>} <span class="faint">· {label(s.status)}</span></li>)}
+          </ul>
+        </>
+      )}
+      {similar.length > 0 && (
+        <>
+          <p class="muted small">Servers that mention {similarWords.map((w, i) => <>{i ? ' or ' : ''}<b>{w}</b></>)}.</p>
+          <ul>
+            {similar.map((s) => <li><a href={`/s/${s.name}`} class="break">{s.title ?? s.name}</a>{s.title && <> <span class="faint mono">{s.name}</span></>} <span class="faint">· {label(s.status)}</span></li>)}
+          </ul>
+        </>
+      )}
     </section>
   )}
 

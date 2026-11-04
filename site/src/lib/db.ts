@@ -354,32 +354,113 @@ export async function getSiblings(hash: string, except: string, limit = 12): Pro
  * whether it ever answered, and the latest run without its long lists. The page made them in two awaits and a third
  * one for a server that never answered; each await costs CPU in the D1 client.
  */
+export type RelatedServer = Pick<ServerRecord, 'name' | 'title' | 'host' | 'status'>;
+
+/** Words that say nothing about what a server does, so no related-servers search runs on them. */
+const EMPTY_WORDS = new Set([
+  'mcp', 'server', 'servers', 'github', 'com', 'org', 'net', 'app', 'dev', 'api', 'tool', 'tools', 'the', 'and', 'for', 'with', 'from', 'your', 'this', 'that',
+  'agent', 'agents', 'cloud', 'web', 'data', 'service', 'services', 'plugin', 'official', 'remote', 'http', 'https', 'www', 'npm', 'pypi', 'python', 'node',
+  'main', 'test', 'demo', 'example', 'client', 'protocol', 'context', 'model', 'integration', 'assistant', 'platform', 'local', 'free', 'open', 'source', 'based', 'powered'
+]);
+
+/** The words of a text that a related-servers search can use: four letters or more, none of the empty ones, longest first. */
+export function searchWords(text: string | null | undefined): string[] {
+  if (!text) return [];
+  const words = [...new Set(text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter((w) => [...w].length >= 4 && !EMPTY_WORDS.has(w)))];
+  return words.sort((a, b) => b.length - a.length || a.localeCompare(b));
+}
+
+/**
+ * The word of a registry name that a related-servers search runs on, before the row is read: the longest telling word
+ * of the last segment ("adobe-mcp-illustrator": illustrator), else of the publisher segment without its reverse-domain
+ * prefix ("io.github.zachshallbetter": zachshallbetter). Null when the name has no such word.
+ */
+export function relatedWord(name: string): string | null {
+  const segments = name.replace(/^url\//, '').split('/');
+  const last = segments[segments.length - 1] ?? '';
+  const publisher = segments.slice(0, -1).join('/').replace(/^(?:[a-z]{2,4}\.)+(?=[^.]+$)/, '');
+  return searchWords(last)[0] ?? searchWords(publisher)[0] ?? null;
+}
+
+/** An FTS5 query that finds the rows where any of the words occurs, inside words too (trigram tokenizer). */
+function anyWord(words: string[]): string {
+  return words.map((w) => `"${w.replace(/"/g, '')}"`).join(' OR ');
+}
+
+/** The statement that lists up to `limit` servers whose text mentions one of the words, except one server. Follows the list's FTS pattern: the match is capped first, then joined. */
+function relatedStatement(d: D1Database, words: string[], except: string, limit: number): D1PreparedStatement {
+  return d
+    .prepare(`SELECT servers.name, servers.title, servers.host, servers.status FROM (SELECT rowid AS match_rowid FROM servers_fts WHERE servers_fts MATCH ? LIMIT ?) AS m CROSS JOIN servers ON servers.rowid = m.match_rowid WHERE servers.name <> ? LIMIT ?`)
+    .bind(anyWord(words), limit + 1, except, limit);
+}
+
+/** How many related servers a page links to, in each of its two lists. */
+export const RELATED_LIMIT = 8;
+
+/**
+ * Everything the server page reads, in one round trip: the row, its history, the servers with the same tool set,
+ * whether it ever answered, the latest run without its long lists, and the links to other servers: the neighbours
+ * on the same host, and the servers whose text mentions a word of the name. The page made them in two awaits and
+ * a third one for a server that never answered; each await costs CPU in the D1 client.
+ *
+ * The links are the crawl path between server pages: the lists (/servers?...) are closed to crawlers, so without
+ * them a server page is reached from the sitemap only, and Google indexes few pages that no page links to.
+ */
 export async function serverPage(name: string): Promise<{
   server: ServerRecord | null;
   history: ProbeRecord[];
   siblings: Array<Pick<ServerRecord, 'name' | 'host' | 'status'>>;
   everAnswered: boolean;
   run: Omit<RunSummary, 'topHosts' | 'changes' | 'heaviest'> | null;
+  /** Other servers on the same host: the ones just after this name and just before it, so every page on a host links to different ones and the chain covers the host. */
+  onHost: RelatedServer[];
+  /** Servers whose name, title, description or host mentions `word`; empty when the name has no telling word or nothing else mentions it. */
+  similar: RelatedServer[];
+  word: string | null;
 }> {
   const d = db();
   const summary = summaryWithout(['topHosts', 'changes', 'heaviest']);
-  const [server, history, siblings, answered, run] = await d.batch([
+  const word = relatedWord(name);
+  const half = RELATED_LIMIT / 2;
+  const [server, history, siblings, answered, run, after, before, similar] = await d.batch([
     d.prepare('SELECT * FROM servers WHERE name = ?').bind(name),
     d.prepare('SELECT probed_at, status, init_ms, tool_count, tools_tokens, claude_tokens FROM probes WHERE name = ? ORDER BY probed_at DESC LIMIT ?').bind(name, 60),
     // A server with no tool set hash has no siblings: = NULL matches nothing.
     d.prepare('SELECT name, host, status FROM servers WHERE toolset_hash = (SELECT toolset_hash FROM servers WHERE name = ?) AND name <> ? ORDER BY name LIMIT ?').bind(name, name, 12),
     d.prepare(`SELECT 1 AS answered FROM probes WHERE name = ? AND status IN ${ANSWERED_STATUSES_SQL} LIMIT 1`).bind(name),
-    d.prepare(`SELECT ${summary.sql} AS summary FROM runs ORDER BY probed_at DESC LIMIT 1`).bind(...summary.binds)
+    d.prepare(`SELECT ${summary.sql} AS summary FROM runs ORDER BY probed_at DESC LIMIT 1`).bind(...summary.binds),
+    // Both walk the (host, name) index from this name outwards: half rows each, nothing else read.
+    d.prepare('SELECT name, title, host, status FROM servers WHERE host = (SELECT host FROM servers WHERE name = ?) AND name > ? ORDER BY name LIMIT ?').bind(name, name, half),
+    d.prepare('SELECT name, title, host, status FROM servers WHERE host = (SELECT host FROM servers WHERE name = ?) AND name < ? ORDER BY name DESC LIMIT ?').bind(name, name, half),
+    word ? relatedStatement(d, [word], name, RELATED_LIMIT) : d.prepare('SELECT name, title, host, status FROM servers WHERE 0')
   ]);
   const row = (server.results as ServerRecord[])[0] ?? null;
   const latest = (run.results as Array<{ summary: string }>)[0];
+  const onHost = [...(after.results as RelatedServer[]), ...(before.results as RelatedServer[])].sort((a, b) => a.name.localeCompare(b.name));
+  const seen = new Set(onHost.map((s) => s.name));
   return {
     server: row,
     history: history.results as ProbeRecord[],
     siblings: siblings.results as Array<Pick<ServerRecord, 'name' | 'host' | 'status'>>,
     everAnswered: (answered.results as unknown[]).length > 0,
-    run: latest ? (JSON.parse(latest.summary) as Omit<RunSummary, 'topHosts' | 'changes' | 'heaviest'>) : null
+    run: latest ? (JSON.parse(latest.summary) as Omit<RunSummary, 'topHosts' | 'changes' | 'heaviest'>) : null,
+    onHost,
+    similar: (similar.results as RelatedServer[]).filter((s) => !seen.has(s.name)),
+    word
   };
+}
+
+/**
+ * A second look for a page whose name gave few related servers: the telling words of the title, up to two, or of the
+ * description when the title has none. A word already tried is not tried again. One more round trip, for the pages
+ * that need it only.
+ */
+export async function similarByTitle(title: string | null | undefined, description: string | null | undefined, except: string, exclude: Set<string>, tried: string[] = []): Promise<{ similar: RelatedServer[]; words: string[] }> {
+  const fresh = (text: string | null | undefined) => searchWords(text).filter((w) => !tried.includes(w)).slice(0, 2);
+  const words = fresh(title).length ? fresh(title) : fresh(description);
+  if (!words.length) return { similar: [], words };
+  const { results } = await relatedStatement(db(), words, except, RELATED_LIMIT + exclude.size).all<RelatedServer>();
+  return { similar: results.filter((s) => !exclude.has(s.name)).slice(0, RELATED_LIMIT), words };
 }
 
 /** The number the board shows: the exact count when there is one, else the estimate. Two indexes in schema.sql hold this expression. */

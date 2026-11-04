@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { env } from 'cloudflare:workers';
 import { memoryD1, type MemoryD1 } from './d1';
-import { countByStatus, latestRun, latestRunWithTrend, listServers, recentChanges, runsBetween, serverPage, sitemapChunkLines } from '../src/lib/db';
+import { countByStatus, latestRun, latestRunWithTrend, listServers, recentChanges, relatedWord, runsBetween, searchWords, serverPage, similarByTitle, sitemapChunkLines } from '../src/lib/db';
 import { GATED_STATUSES } from '../../packages/mcpcost/src/types';
 
 /**
@@ -187,5 +187,58 @@ describe('the server page in one round trip', () => {
     expect(page.siblings).toEqual([]);
     expect(page.everAnswered).toBe(false);
     expect((await serverPage('nobody/here')).server).toBeNull();
+  });
+
+  it('links the neighbours on the same host, in name order, from both sides of the name', async () => {
+    const page = await serverPage('b/twin');
+    expect(page.onHost.map((s) => s.name)).toEqual(['a/one', 'c/alone']);
+    expect(page.onHost[0]).toEqual({ name: 'a/one', title: null, host: 'x.example', status: 'ok' });
+    expect((await serverPage('c/alone')).onHost.map((s) => s.name)).toEqual(['a/one', 'b/twin']);
+  });
+
+  it('links the servers that mention a word of the name, itself and the host neighbours left out', async () => {
+    const server = db.sql.prepare("INSERT INTO servers (name, title, description, url, host, transport, probed_at, status) VALUES (?, ?, ?, 'https://y.example/mcp', ?, 'streamable-http', '2026-10-25T08:30:00.000Z', 'ok')");
+    server.run('d/transcript-tools', null, null, 'd.example');
+    server.run('e/notes', 'Transcripts for meetings', null, 'e.example');
+    server.run('f/other', 'Other', 'Reads a transcript of a call', 'd.example');
+    server.run('g/mcp', 'Nothing here', null, 'g.example');
+    const page = await serverPage('d/transcript-tools');
+    expect(page.word).toBe('transcript');
+    expect(page.onHost.map((s) => s.name)).toEqual(['f/other']);
+    expect(page.similar.map((s) => s.name)).toEqual(['e/notes']);
+    // A name with no telling word searches nothing.
+    expect((await serverPage('g/mcp')).word).toBe(null);
+    expect((await serverPage('g/mcp')).similar).toEqual([]);
+  });
+
+  it('looks again by the words of the title, up to two, and leaves out the servers already linked', async () => {
+    const server = db.sql.prepare("INSERT INTO servers (name, title, url, host, transport, probed_at, status) VALUES (?, ?, 'https://y.example/mcp', ?, 'streamable-http', '2026-10-25T08:30:00.000Z', 'ok')");
+    server.run('e/notes', 'Transcripts for meetings', 'e.example');
+    server.run('h/calendar', 'Meetings and calendars', 'h.example');
+    const { similar, words } = await similarByTitle('Transcripts of meetings', null, 'e/notes', new Set(['h/calendar']));
+    expect(words).toEqual(['transcripts', 'meetings']);
+    expect(similar).toEqual([]);
+    expect((await similarByTitle('Transcripts of meetings', null, 'x/none', new Set())).similar.map((s) => s.name).sort()).toEqual(['e/notes', 'h/calendar']);
+    // A word tried before is skipped; a title without words gives way to the description.
+    expect((await similarByTitle('Transcripts of meetings', null, 'x/none', new Set(), ['transcripts'])).words).toEqual(['meetings']);
+    expect((await similarByTitle('SAP', 'Meetings and calendars for SAP', 'x/none', new Set())).words).toEqual(['calendars', 'meetings']);
+    expect(await similarByTitle(null, null, 'x/none', new Set())).toEqual({ similar: [], words: [] });
+  });
+});
+
+describe('the word a related-servers search runs on', () => {
+  it('is the longest telling word of the last name segment, else of the publisher', () => {
+    expect(relatedWord('io.github.zachshallbetter/adobe-mcp-illustrator')).toBe('illustrator');
+    expect(relatedWord('io.github.arcmira/arcmira')).toBe('arcmira');
+    expect(relatedWord('com.replynodes/mcp')).toBe('replynodes');
+    expect(relatedWord('io.github.theluckystrike/timer-tracking')).toBe('tracking');
+    expect(relatedWord('url/https://x.y/mcp')).toBe(null);
+    expect(relatedWord('io.github.foo/mcp-server')).toBe(null);
+  });
+
+  it('keeps the words of four letters or more that are not empty, longest first', () => {
+    expect(searchWords('The GitHub MCP server for your repos')).toEqual(['repos']);
+    expect(searchWords('Transcripts: YouTube & meetings')).toEqual(['transcripts', 'meetings', 'youtube']);
+    expect(searchWords(null)).toEqual([]);
   });
 });
