@@ -227,8 +227,10 @@ async function edge(since, until) {
   const grouped = (events) => {
     const by = new Map();
     for (const e of events) {
-      const key = [e.action, e.clientASNDescription, e.clientRequestPath, e.userAgent].join('\u0000');
-      const g = by.get(key) ?? by.set(key, { count: 0, dimensions: { action: e.action, clientASNDescription: e.clientASNDescription, clientRequestPath: e.clientRequestPath, userAgent: e.userAgent } }).get(key);
+      // By the agent's first 60 characters, which is what the table shows: the versions after them would split one scraper over many rows.
+      const agent = String(e.userAgent ?? '').slice(0, 60);
+      const key = [e.action, e.clientASNDescription, e.clientRequestPath, agent].join('\u0000');
+      const g = by.get(key) ?? by.set(key, { count: 0, dimensions: { action: e.action, clientASNDescription: e.clientASNDescription, clientRequestPath: e.clientRequestPath, userAgent: agent } }).get(key);
       g.count += 1;
     }
     return { stopped: [...by.values()].sort((a, b) => b.count - a.count).slice(0, 40) };
