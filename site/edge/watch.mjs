@@ -204,26 +204,37 @@ const tenMinutes = (e) => {
 };
 const sorted = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]);
 
-/** What the zone stopped before the Worker, when the zone token may read analytics. */
+/**
+ * What the zone stopped before the Worker, when the zone token may read analytics. The two datasets are asked
+ * apart: a dataset the zone's plan does not hold answers "does not have access to the path", a token without
+ * Zone: Analytics: Read answers "does not have permission", and the one that answers is still shown.
+ */
 async function edge(since, until) {
   if (!zoneToken) return { note: 'CLOUDFLARE_ZONE_TOKEN is not set, so what the zone stopped before the Worker is not shown.' };
+  let zone;
   try {
     const z = await cf('/zones?name=ulehla.dev', undefined, zoneToken);
-    const zone = z.result?.[0]?.id;
+    zone = z.result?.[0]?.id;
     if (!zone) return { note: 'The zone token does not see ulehla.dev.' };
-    const d = await gql(
-      `query($zone: string!, $from: Time!, $to: Time!) { viewer { zones(filter: {zoneTag: $zone}) {
-        all: httpRequestsAdaptiveGroups(limit: 1, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}) { count }
-        stopped: firewallEventsAdaptiveGroups(limit: 40, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}, orderBy: [count_DESC]) {
-          count dimensions { action clientASNDescription clientRequestPath userAgent } } } } }`,
-      { zone, from: iso(since), to: iso(until) },
-      zoneToken
-    );
-    const v = d.viewer.zones[0] ?? {};
-    return { total: v.all?.[0]?.count ?? 0, stopped: v.stopped ?? [] };
   } catch (e) {
-    return { note: `The zone's analytics are not readable with the zone token (${String(e.message).slice(0, 120)}). Add Zone: Analytics: Read to it to see what the edge stops.` };
+    return { note: `The zone token cannot list the zones (${String(e.message).slice(0, 160)}).` };
   }
+  const vars = { zone, from: iso(since), to: iso(until) };
+  const ask = (field) => gql(`query($zone: string!, $from: Time!, $to: Time!) { viewer { zones(filter: {zoneTag: $zone}) { ${field} } } }`, vars, zoneToken).then((d) => d.viewer.zones[0] ?? {});
+  const [all, stopped] = await Promise.allSettled([
+    ask(`all: httpRequestsAdaptiveGroups(limit: 1, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}) { count }`),
+    ask(`stopped: firewallEventsAdaptiveGroups(limit: 40, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}, orderBy: [count_DESC]) {
+      count dimensions { action clientASNDescription clientRequestPath userAgent } }`)
+  ]);
+  const why = (r) => String(r.reason?.message ?? r.reason).slice(0, 200);
+  const notes = [];
+  if (all.status === 'rejected') notes.push(`The zone's request count is not readable with the zone token (httpRequestsAdaptiveGroups: ${why(all)}).`);
+  if (stopped.status === 'rejected') notes.push(`What the zone stopped is not readable with the zone token (firewallEventsAdaptiveGroups: ${why(stopped)}).`);
+  return {
+    total: all.status === 'fulfilled' ? (all.value.all?.[0]?.count ?? 0) : undefined,
+    stopped: stopped.status === 'fulfilled' ? (stopped.value.stopped ?? []) : undefined,
+    note: notes.length ? notes.join(' ') : undefined
+  };
 }
 
 const lines = [];
@@ -264,8 +275,10 @@ say(`| Worker errors | ${fmt(sum(windowHours, 'errors'))} | ${fmt(perHour(sum(wi
 say(`| D1 rows read | ${fmt(rowsRead)} | ${fmt(d1PerHour(rowsRead))} | ${fmt(sum(d1, 'rowsRead'))} |`);
 say(`| D1 rows written | ${fmt(sum(d1Window, 'rowsWritten'))} | ${fmt(d1PerHour(sum(d1Window, 'rowsWritten')))} | ${fmt(sum(d1, 'rowsWritten'))} |`);
 if (zone.total !== undefined) {
-  const stopped = zone.stopped.reduce((a, r) => a + r.count, 0);
   say(`| Requests at the edge | ${fmt(zone.total)} | ${fmt(perHour(zone.total))} | |`);
+}
+if (zone.stopped !== undefined) {
+  const stopped = zone.stopped.reduce((a, r) => a + r.count, 0);
   say(`| Stopped by the zone's rules | ${fmt(stopped)} | ${fmt(perHour(stopped))} | |`);
 }
 say();
@@ -384,7 +397,7 @@ else if (queries.length) {
   say();
 }
 if (zone.note) say(zone.note);
-else if (zone.stopped.length) {
+if (zone.stopped?.length) {
   say('## Stopped before the Worker');
   say();
   say('| action | network | path | agent | requests |');
