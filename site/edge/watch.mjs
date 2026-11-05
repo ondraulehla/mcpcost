@@ -221,10 +221,25 @@ async function edge(since, until) {
   }
   const vars = { zone, from: iso(since), to: iso(until) };
   const ask = (field) => gql(`query($zone: string!, $from: Time!, $to: Time!) { viewer { zones(filter: {zoneTag: $zone}) { ${field} } } }`, vars, zoneToken).then((d) => d.viewer.zones[0] ?? {});
+  const filter = `filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}`;
+  // The Free zone plan holds the grouped request counts and the single firewall events, not the grouped firewall
+  // events (2026-11-05), so the events are grouped here when the grouped dataset answers "does not have access".
+  const grouped = (events) => {
+    const by = new Map();
+    for (const e of events) {
+      const key = [e.action, e.clientASNDescription, e.clientRequestPath, e.userAgent].join('\u0000');
+      const g = by.get(key) ?? by.set(key, { count: 0, dimensions: { action: e.action, clientASNDescription: e.clientASNDescription, clientRequestPath: e.clientRequestPath, userAgent: e.userAgent } }).get(key);
+      g.count += 1;
+    }
+    return { stopped: [...by.values()].sort((a, b) => b.count - a.count).slice(0, 40) };
+  };
   const [all, stopped] = await Promise.allSettled([
-    ask(`all: httpRequestsAdaptiveGroups(limit: 1, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}) { count }`),
-    ask(`stopped: firewallEventsAdaptiveGroups(limit: 40, filter: {datetime_geq: $from, datetime_lt: $to, clientRequestHTTPHost: "${HOST}"}, orderBy: [count_DESC]) {
-      count dimensions { action clientASNDescription clientRequestPath userAgent } }`)
+    ask(`all: httpRequestsAdaptiveGroups(limit: 1, ${filter}) { count }`),
+    ask(`stopped: firewallEventsAdaptiveGroups(limit: 40, ${filter}, orderBy: [count_DESC]) { count dimensions { action clientASNDescription clientRequestPath userAgent } }`).catch((e) =>
+      /does not have access/.test(e.message)
+        ? ask(`stopped: firewallEventsAdaptive(limit: 5000, ${filter}) { action clientASNDescription clientRequestPath userAgent }`).then((v) => grouped(v.stopped ?? []))
+        : Promise.reject(e)
+    )
   ]);
   const why = (r) => String(r.reason?.message ?? r.reason).slice(0, 200);
   const notes = [];
