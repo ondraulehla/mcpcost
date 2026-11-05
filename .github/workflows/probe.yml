@@ -198,9 +198,24 @@ jobs:
           idx=$(npx wrangler d1 execute mcp-pulse --remote --json --command "SELECT count(*) AS n FROM sqlite_master WHERE type='index' AND name='servers_init_name'" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s)[0].results[0].n))')
           if [ "$idx" != "0" ]; then npx wrangler d1 execute mcp-pulse --remote --file=migrations/006-fewer-indexes.sql; echo "migration 006 applied"; fi
       - name: Import into D1
+        # The import lands as one transaction, and wrangler polls the API for its state. The last poll came back as
+        # "Not currently importing anything" on 2026-11-05 (wrangler 4.147) after the import had landed, and the run
+        # turned red. So a failed command is checked against the database: the run's row in "runs" is the first
+        # statement of the file, and it is there only when the whole import landed. The file is idempotent
+        # (INSERT OR REPLACE, upserts), so an import that did not land is tried again.
         if: ${{ inputs.sample == '' && env.CLOUDFLARE_API_TOKEN != '' }}
         working-directory: site
-        run: npx wrangler d1 execute mcp-pulse --remote --file=../data/latest/import.sql
+        run: |
+          at=$(node -e 'console.log(JSON.parse(require("fs").readFileSync("../data/latest/summary.json","utf8")).probedAt)')
+          landed() { npx wrangler d1 execute mcp-pulse --remote --json --command "SELECT count(*) AS n FROM runs WHERE probed_at = '$at'" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s)[0].results[0].n))'; }
+          for attempt in 1 2 3; do
+            npx wrangler d1 execute mcp-pulse --remote --file=../data/latest/import.sql && exit 0
+            echo "::warning::Import attempt $attempt failed. Looking whether it landed."
+            sleep 20
+            if [ "$(landed)" = "1" ]; then echo "The run $at is in D1, so the import landed."; exit 0; fi
+          done
+          echo "::error::The import did not land in three attempts."
+          exit 1
       - name: Keep the run as an artifact
         # After the import, so the next run diffs against what D1 really holds. A sample run keeps its raw file only.
         if: ${{ inputs.sample == '' }}

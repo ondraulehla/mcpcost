@@ -23,9 +23,14 @@ const HOST = 'mcpcost.ulehla.dev';
 const SCRIPT = 'mcpcost';
 const DB_ID = 'f1984775-849a-4277-805e-537ea5ad7611';
 
-/** The thresholds, per hour. The scrapers of October 2026 made 4 000 requests an hour from one network, readers make a few hundred a day. */
+/**
+ * The thresholds, per hour. The scrapers of October 2026 made 4 000 requests an hour from one network, readers
+ * make a few hundred a day. Since the server pages link to each other (2026-11-04) the named crawlers (Google,
+ * Perplexity) walk the board at about 10 000 requests an hour together, which the Workers Paid plan covers,
+ * so the threshold for everyone sits above them; the per-network thresholds below still catch a scraper.
+ */
 const LIMITS = {
-  requests: Number(process.env.WATCH_REQUESTS_PER_HOUR ?? 5000), // Worker requests from everyone
+  requests: Number(process.env.WATCH_REQUESTS_PER_HOUR ?? 25_000), // Worker requests from everyone
   network: Number(process.env.WATCH_NETWORK_REQUESTS_PER_HOUR ?? 800), // requests from one network that does not name itself a crawler
   lists: Number(process.env.WATCH_LIST_REQUESTS_PER_HOUR ?? 300), // list variants from one network, whatever it calls itself: robots.txt disallows them for everyone
   rowsRead: Number(process.env.WATCH_ROWS_READ_PER_HOUR ?? 1_000_000) // D1 rows read
