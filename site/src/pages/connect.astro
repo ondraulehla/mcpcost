@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 // Rendered by the Worker, not prerendered: see methodology.astro. The page reads no data; the cache keeps it a day.
 Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
 const url = 'https://mcpcost.ulehla.dev/mcp';
+// The listing in the directory of Claude, published 2026-11-13 (claude.ai/directory/manage/mcpcost, "View listing").
+const claudeListing = 'https://claude.ai/directory/mcpcost';
 const tools: Array<{ name: string; title: string; does: string; ask: string }> = [
   { name: 'lookup_server', title: 'Look up a registry server', does: 'The newest daily probe of one server: status, how a client gets access, the exact token cost of its tools in Claude, the tool count, the latency and its most expensive tools.', ask: 'Is the GitHub MCP server up, and how many tokens do its tools cost?' },
   { name: 'search_servers', title: 'Search the registry board', does: 'Servers by words in their name, title, description or host, with filters, sorted by token cost.', ask: 'Find MCP servers for Postgres that answer without auth, the cheapest first.' },
@@ -32,7 +34,7 @@ const jsonld = {
     <p>The server speaks Streamable HTTP and needs no authentication. The URL:</p>
     <pre>{url}</pre>
     <dl class="facts">
-      <dt>Claude</dt><dd>Open Settings, then Connectors, then “Add custom connector”. Give the name <span class="mono">mcpcost</span> and the URL above. It works in Claude on the web and on the desktop.</dd>
+      <dt>Claude</dt><dd>mcpcost is in the Claude directory: open <a href={claudeListing} rel="noopener">its listing</a> and connect it there, or find <span class="mono">mcpcost</span> under Customize, Connectors. No sign-in is asked. To add it by hand, choose “Add custom connector” and give the URL above.</dd>
       <dt>Claude Code</dt><dd><code>claude mcp add --transport http mcpcost {url}</code></dd>
       <dt>ChatGPT</dt><dd>In developer mode, add a custom connector (app) with the URL above and no authentication.</dd>
       <dt>Other clients</dt><dd>Cursor, VS Code, Windsurf and other clients that take a remote server: add an entry with the URL above to the MCP config of the client.</dd>
