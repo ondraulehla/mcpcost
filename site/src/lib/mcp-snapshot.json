@@ -61,7 +61,8 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": true,
+          "title": "Look up a registry server"
         },
         "execution": {
           "taskSupport": "forbidden"
@@ -367,7 +368,8 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": true,
+          "title": "Search the registry board"
         },
         "execution": {
           "taskSupport": "forbidden"
@@ -484,7 +486,7 @@
       {
         "name": "check_server",
         "title": "Probe a server live",
-        "description": "Connects to an MCP server URL now (initialize and tools/list, 10 s timeout) and reports status, protocol, how a client gets access, tool names and the token cost of the tool definitions: exact in Claude when the counter is available, else an estimate from the schema size. Use it for a URL that is not in the official registry, or to see the state this minute; for a registry server prefer lookup_server, which is instant. Sends no credentials: a server that needs them comes back with status \"auth\", not an error. A URL that is not https, or a server that does not answer, returns its failure as status and error.",
+        "description": "Connects to an MCP server URL now (initialize and tools/list, 10 s timeout) and reports status, protocol, how a client gets access, tool names and the token cost of the tool definitions: exact in Claude when the counter is available, else an estimate from the schema size. Use it for a URL that is not in the official registry, or to see the state this minute; for a registry server prefer lookup_server, which is instant. Sends no credentials: a server that needs them comes back with status \"auth\", not an error. A URL that is not https, or a server that does not answer, returns its failure as status and error. The requests are the ones the MCP specification defines for a client (https://modelcontextprotocol.io/specification): the initialize handshake and tools/list over Streamable HTTP or SSE; the tool calls no tool of the server.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -504,7 +506,8 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": true,
+          "title": "Probe a server live"
         },
         "execution": {
           "taskSupport": "forbidden"
@@ -654,7 +657,8 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": true,
+          "title": "Compare servers side by side"
         },
         "execution": {
           "taskSupport": "forbidden"
@@ -862,7 +866,8 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": true,
+          "title": "Registry summary"
         },
         "execution": {
           "taskSupport": "forbidden"

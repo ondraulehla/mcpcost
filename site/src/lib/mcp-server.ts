@@ -63,7 +63,9 @@ function build(): McpServer {
         'Health and token cost of every remote server in the official MCP registry, and of its npm and PyPI package servers, probed daily. Use lookup_server for a registry name or URL, search_servers to find servers, compare_servers to put two to five next to each other, check_server to probe a URL that is not in the registry. claudeTokens is the exact count from the Anthropic count_tokens endpoint (claudeTokensClaudeCode with the mcp__<server>__ prefix); toolsTokens is an o200k_base estimate over each tool definition.'
     }
   );
-  const tool = server.registerTool.bind(server) as unknown as RegisterTool;
+  const register = server.registerTool.bind(server) as unknown as RegisterTool;
+  // The name of a tool for people: the directory of Claude reads it from annotations.title, other clients from title.
+  const tool: RegisterTool = (name, config, cb) => register(name, { ...config, annotations: { ...config.annotations, title: config.title } }, cb);
 
   tool<{ nameOrUrl: string }>(
     'lookup_server',
@@ -147,7 +149,7 @@ function build(): McpServer {
     {
       title: 'Probe a server live',
       description:
-        'Connects to an MCP server URL now (initialize and tools/list, 10 s timeout) and reports status, protocol, how a client gets access, tool names and the token cost of the tool definitions: exact in Claude when the counter is available, else an estimate from the schema size. Use it for a URL that is not in the official registry, or to see the state this minute; for a registry server prefer lookup_server, which is instant. Sends no credentials: a server that needs them comes back with status "auth", not an error. A URL that is not https, or a server that does not answer, returns its failure as status and error.',
+        'Connects to an MCP server URL now (initialize and tools/list, 10 s timeout) and reports status, protocol, how a client gets access, tool names and the token cost of the tool definitions: exact in Claude when the counter is available, else an estimate from the schema size. Use it for a URL that is not in the official registry, or to see the state this minute; for a registry server prefer lookup_server, which is instant. Sends no credentials: a server that needs them comes back with status "auth", not an error. A URL that is not https, or a server that does not answer, returns its failure as status and error. The requests are the ones the MCP specification defines for a client (https://modelcontextprotocol.io/specification): the initialize handshake and tools/list over Streamable HTTP or SSE; the tool calls no tool of the server.',
       annotations: READ_ONLY,
       inputSchema: { url: z.string().url().describe('The https URL of the MCP endpoint, Streamable HTTP (…/mcp) or SSE (…/sse)') },
       outputSchema: {
