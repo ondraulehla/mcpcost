@@ -71,7 +71,7 @@ const LIST_SCRAPER_NETWORKS = /RapidSeedbox|Alibaba|Meta Platforms/i;
 
 
 /** Paths with no page of their own, and the page that answers what their visitors ask. */
-const MOVED: Record<string, string> = { '/pricing': '/tokens', '/privacy-policy': '/privacy', '/docs': '/connect' };
+const MOVED: Record<string, string> = { '/pricing': '/tokens', '/privacy-policy': '/privacy', '/tos': '/terms', '/docs': '/connect' };
 
 /** A 403 for a blocked crawler or a list scraper, a 301 for an old host or a moved path, or null to go on. Cheap: no database. */
 export function gate(request: Request): Response | null {

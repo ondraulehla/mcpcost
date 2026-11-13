@@ -1,0 +1,91 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "mcpcost",
+  "version": "0.3.4",
+  "description": "Is this MCP server up, and what do its tools cost in context tokens? Daily data for every server in the official MCP registry.",
+  "author": {
+    "name": "Ondřej Úlehla",
+    "url": "https://ulehla.dev"
+  },
+  "homepage": "https://mcpcost.ulehla.dev",
+  "repository": "https://github.com/ondraulehla/mcpcost",
+  "license": "MIT",
+  "keywords": ["mcp", "tokens", "context-window", "cost", "health", "registry"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "mcpcost",
+        "shortDescription": "MCP server health and cost",
+        "longDescription": "mcpcost tells you the state of MCP servers. It reads a public board that probes every server in the official MCP registry once a day: remote servers over the network, npm and PyPI package servers in a container.\n\nWhat you can ask:\n- Is this MCP server up?\n- How does a client get access: no auth, OAuth or an API key?\n- How many context tokens do the tool definitions of a server cost?\n- Which servers do this job, and which one is the cheapest? Compare two to five side by side.\n- What is the state of the registry as a whole: how many servers answer, what the median server costs, which protocol versions are in use?\n\nOne tool probes a public MCP URL live, with no credentials, for a server that is not in the registry.\n\nAll five tools are read-only. No sign-in, no account, free. The probe, the data and the site are open source (MIT).",
+        "developerName": "Ondřej Úlehla",
+        "category": "Developer Tools",
+        "capabilities": [],
+        "websiteURL": "https://mcpcost.ulehla.dev",
+        "supportURL": "https://mcpcost.ulehla.dev/connect",
+        "privacyPolicyURL": "https://mcpcost.ulehla.dev/privacy",
+        "termsOfServiceURL": "https://mcpcost.ulehla.dev/terms",
+        "logo": "./assets/logo.png",
+        "brandColor": "#E8571F",
+        "defaultPrompt": [
+          "How many servers in the official MCP registry answer today, and what does the median server cost in tokens?",
+          "Find MCP servers for Postgres that answer without auth, the cheapest first.",
+          "Compare the token cost of two MCP servers that do the same job."
+        ]
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "The state of the whole registry",
+              "prompt": "How many servers in the official MCP registry answer today, and what does the median server cost in context tokens?",
+              "tools_triggered": ["registry_summary"],
+              "expected_behavior": "Calls registry_summary with no arguments. The answer gives the date of the newest daily run, the number of servers probed and the number that answer, and the median token cost of a server's tool definitions."
+            },
+            {
+              "description": "Search for servers by a word, with a filter and a sort",
+              "prompt": "Find MCP servers for Postgres that answer without auth, the cheapest first.",
+              "tools_triggered": ["search_servers"],
+              "expected_behavior": "Calls search_servers with query postgres, status ok and sort claude-asc. The answer lists servers with name, host, status, tool count and token cost, the cheapest first."
+            },
+            {
+              "description": "The record of one server in the registry",
+              "prompt": "Is the MCP server com.mcparmory/grafana up, and how many tokens do its tools cost?",
+              "tools_triggered": ["lookup_server"],
+              "expected_behavior": "Calls lookup_server with nameOrUrl com.mcparmory/grafana. The answer gives the status of the newest daily probe, the tool count, the token cost of the tool definitions and a link to the server's page on mcpcost.ulehla.dev."
+            },
+            {
+              "description": "Two servers side by side",
+              "prompt": "Compare the MCP servers com.mcparmory/grafana and io.github.CloudCorpRecords/dashmetrics by token cost.",
+              "tools_triggered": ["compare_servers"],
+              "expected_behavior": "Calls compare_servers with the two names. The answer gives one row per server with status, tool count and token cost, and says which one is the cheapest and which one is the most expensive."
+            },
+            {
+              "description": "The state of an MCP endpoint given as a URL",
+              "prompt": "Check the MCP server at https://mcp.deepwiki.com/mcp: does it answer, and how many tools does it have?",
+              "tools_triggered": ["check_server"],
+              "expected_behavior": "Calls check_server with the URL. The answer gives the status of the server (alive), the tool count and the token cost. For a URL that the board already probes each day the answer is the stored record and says inRegistry true."
+            }
+          ],
+          "negative": [
+            {
+              "description": "A question that has no relation to MCP servers",
+              "prompt": "What is the weather in Prague tomorrow?"
+            },
+            {
+              "description": "A coding task that needs no data about MCP servers",
+              "prompt": "Write a Python function that reverses a string."
+            },
+            {
+              "description": "A request to change or call a server, which mcpcost cannot do: all its tools are read-only",
+              "prompt": "Create a new issue in my Linear workspace with the title Fix login."
+            }
+          ]
+        },
+        "demo_recording_url": "REPLACE-WITH-THE-URL-OF-THE-DEMO-VIDEO"
+      },
+      "publication": {
+        "release_notes": "First release: five read-only tools over the mcpcost board (lookup_server, search_servers, compare_servers, check_server, registry_summary)."
+      }
+    }
+  }
+}

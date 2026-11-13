@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ params, site }) => {
   if (params.chunk === 'pages') {
     const run = await latestRun(['topHosts', 'changes', 'heaviest']);
     const lastmod = run?.probedAt.slice(0, 10) ?? new Date().toISOString().slice(0, 10);
-    lines = ['/', '/tokens', '/servers', '/statistics', '/hosts', '/check', '/methodology', '/report', '/report/2026-10', '/connect', '/privacy', '/errors', ...FIXES.map((f) => `/errors/${f.slug}`)].map((p) => `  <url><loc>${escape(`${base}${p}`)}</loc><lastmod>${lastmod}</lastmod></url>`).join('\n');
+    lines = ['/', '/tokens', '/servers', '/statistics', '/hosts', '/check', '/methodology', '/report', '/report/2026-10', '/connect', '/privacy', '/terms', '/errors', ...FIXES.map((f) => `/errors/${f.slug}`)].map((p) => `  <url><loc>${escape(`${base}${p}`)}</loc><lastmod>${lastmod}</lastmod></url>`).join('\n');
   } else {
     const n = Number(params.chunk);
     if (!/^\d{1,9}$/.test(params.chunk ?? '')) return new Response('Not found', { status: 404 });

@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Rendered by the Worker, not prerendered: see methodology.astro. The page reads no data; the cache keeps it a day.
+Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
+const updated = '13 November 2026';
+---
+
+<Layout title="Terms of use" description="The terms for the mcpcost website, its JSON API and its MCP server: free, no account, no warranty, fair use, and the licences of the data and the code.">
+  <p class="kicker">terms</p>
+  <h1 class="poster">Terms of use</h1>
+  <p class="lede">mcpcost is free and needs no account. These terms say what you can expect from it and what it expects from you.</p>
+  <p class="muted small">Last change: {updated}. These terms apply to the website mcpcost.ulehla.dev, its JSON API and its MCP server at <span class="mono">https://mcpcost.ulehla.dev/mcp</span>. When you use them, you agree to these terms.</p>
+
+  <section class="panel" aria-labelledby="who-h">
+    <h2 id="who-h" class="panel-title">Who provides the service</h2>
+    <p>mcpcost is an open-source project of Ondřej Úlehla, Czech Republic (<a href="https://ulehla.dev" rel="noopener">ulehla.dev</a>). It is not a company, and it has no relation to the publishers of the MCP servers it measures or to the makers of the MCP clients it works with.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="what-h">
+    <h2 id="what-h" class="panel-title">What you get</h2>
+    <p>The board shows the result of a daily probe of public MCP servers: whether a server answers, how a client gets access, and how many context tokens its tool definitions cost. The website, the API and the MCP server give you the same data. All of it is free.</p>
+    <p>A result is a measurement at one time from one network. A server that the board shows as down can work for you, and the other way round. Token counts are for the model that the page names and can change when the model or the server changes. Check a result yourself before you make a decision that matters.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="warranty-h">
+    <h2 id="warranty-h" class="panel-title">No warranty</h2>
+    <p>The service comes as it is, with no warranty of any kind: not for accuracy, not for availability, not for fitness for a purpose. It can change or stop at any time. As far as the law allows, the provider is not liable for loss or damage that comes from the use of the service or its data. Rights that the law gives you as a consumer stay as they are.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="use-h">
+    <h2 id="use-h" class="panel-title">Fair use</h2>
+    <ul>
+      <li>Keep to the limits. The list API takes at most 6 requests in 10 seconds from one address. For all the data, take the <a href="/report">dataset</a> or the <a href="https://github.com/ondraulehla/mcpcost" rel="noopener">repository</a>, not a crawl of the pages.</li>
+      <li>Use the live check (<span class="mono">check_server</span>, <span class="mono">/check</span>) only for public MCP endpoints. Do not use it to scan networks, to load a server or to reach an address that is not public.</li>
+      <li>Do not put secrets into a URL that you give to the service. A URL that you add to the board is public.</li>
+      <li>Do not try to break or overload the service.</li>
+    </ul>
+    <p>We can limit or block a client that does not keep to these rules.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="licence-h">
+    <h2 id="licence-h" class="panel-title">Licences</h2>
+    <p>The code is open source under the MIT licence. The monthly datasets and the re-check evidence are under <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>: use them for any purpose and name mcpcost as the source. Names, descriptions and tool definitions of MCP servers belong to their publishers; the board shows what the servers and the official MCP registry publish.</p>
+    <p>You publish an MCP server and do not want it probed or shown? Open an issue at <a href="https://github.com/ondraulehla/mcpcost/issues" rel="noopener">github.com/ondraulehla/mcpcost</a> and we take it out.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="other-h">
+    <h2 id="other-h" class="panel-title">Privacy, changes, law</h2>
+    <p>The <a href="/privacy">privacy policy</a> says what data the service gets from you. When these terms change, the date at the top changes, and the history is in the <a href="https://github.com/ondraulehla/mcpcost/commits/main/site/src/pages/terms.astro" rel="noopener">repository</a>. The law of the Czech Republic applies to these terms.</p>
+  </section>
+</Layout>

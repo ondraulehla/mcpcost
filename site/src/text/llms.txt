@@ -17,7 +17,7 @@ Token counts: claudeTokens is exact. It comes from the Anthropic count_tokens en
 - https://mcpcost.ulehla.dev/report : monthly reports, The state of the MCP registry; https://mcpcost.ulehla.dev/report/2026-10 reads the runs of October 2026 and ends with a CC BY 4.0 dataset, one row per server, at https://mcpcost.ulehla.dev/data/mcpcost-2026-10.json.gz
 - https://mcpcost.ulehla.dev/errors : the start-up errors of PyPI servers after mcp 2.0, the Python SDK (FastMCP renamed to MCPServer, lowlevel Server decorators removed, streamablehttp_client removed, McpError renamed); one page per error text at /errors/<slug> with the cause, the fix and the registry servers that stop with it today
 - https://mcpcost.ulehla.dev/connect : how to add the MCP server to Claude, ChatGPT and other clients, its five tools and example questions
-- https://mcpcost.ulehla.dev/privacy : privacy policy
+- https://mcpcost.ulehla.dev/privacy : privacy policy; https://mcpcost.ulehla.dev/terms : terms of use
 - https://mcpcost.ulehla.dev/statistics, /hosts, /methodology
 
 ## Machine access
