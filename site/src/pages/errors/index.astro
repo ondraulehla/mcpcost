@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { countServersWithErrors, latestRun } from '../../lib/db';
+import { FIXES, GUIDE } from '../../lib/fixes';
+import { num, date } from '../../lib/format';
+
+// The start-up errors of mcp 2.x, each with the number of registry servers that stop with it in the newest run.
+Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
+const [counts, run] = await Promise.all([
+  countServersWithErrors(Object.fromEntries(FIXES.map((f) => [f.slug, f.like]))),
+  latestRun(['topHosts', 'changes', 'heaviest'])
+]);
+const total = Object.values(counts).reduce((a, b) => a + b, 0);
+const measured = run ? date(run.probedAt) : '';
+const pinned = run?.byStatus?.needs_old_sdk ?? 0;
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Start-up errors of MCP servers after mcp 2.0, the Python SDK',
+  itemListElement: FIXES.map((f, i) => ({ '@type': 'ListItem', position: i + 1, name: f.error, url: `https://mcpcost.ulehla.dev/errors/${f.slug}` }))
+};
+---
+
+<Layout title="MCP Python SDK 2.x errors: the cause and the fix for each one" description={`mcp 2.0 renamed FastMCP and removed names that servers import. ${num(total)} PyPI servers in the MCP registry stop at start-up because of it. Each error text, its cause and its fix.`} jsonld={jsonld}>
+  <p class="kicker">mcp 2.x · python sdk</p>
+  <h1 class="poster">Errors after mcp 2.0</h1>
+  <p class="lede">
+    mcp 2.0.0, the Python SDK, came to PyPI on 28 July 2026. It renamed FastMCP to MCPServer and removed names that servers import.
+    A package that asks for <code>mcp</code> with no upper bound gets 2.x from a plain install and stops at start-up.
+  </p>
+
+  <section class="panel" aria-labelledby="errors-h">
+    <h2 id="errors-h" class="panel-title">The errors <small>{measured}</small></h2>
+    <p>
+      {num(total)} PyPI package servers in the official MCP registry stopped with one of these errors in the newest daily probe.
+      {pinned > 0 && <> {num(pinned)} servers start and list their tools when the probe installs them with <code>mcp&lt;2</code>.</>}
+    </p>
+    <table class="errors">
+      <thead><tr><th>Error text</th><th class="n">Servers</th></tr></thead>
+      <tbody>
+        {FIXES.map((f) => (
+          <tr>
+            <td><a href={`/errors/${f.slug}`} class="mono break">{f.error}</a><br /><span class="muted small">{f.changed}</span></td>
+            <td class="n">{num(counts[f.slug] ?? 0)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel" aria-labelledby="fix-h">
+    <h2 id="fix-h" class="panel-title">The fix for all of them</h2>
+    <p>To start a server that stops with one of these errors, install it with the SDK below 2:</p>
+    <pre>{`uvx --with "mcp<2" <package>`}</pre>
+    <p>A publisher adds an upper bound to the dependencies and publishes a new version, or moves the code to mcp 2.x:</p>
+    <pre>{`dependencies = ["mcp>=1.2,<2"]`}</pre>
+    <p class="muted small">Each page has the code before and after, from the SDK's <a href={GUIDE} rel="noopener">migration guide</a>, and the list of servers. The numbers come from the daily probe: <a href="/methodology">how it works</a>, <a href="/statistics">all results</a>.</p>
+  </section>
+</Layout>
+
+<style>
+  .errors { width: 100%; border-collapse: collapse; margin: 0.75rem 0 0; }
+  .errors th, .errors td { text-align: left; vertical-align: top; padding: 0.6rem 0.75rem 0.6rem 0; border-top: 1px solid var(--line); }
+  .errors th { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); border-top: 0; }
+  .errors .n { text-align: right; padding-right: 0; font-family: var(--font-mono); white-space: nowrap; }
+</style>

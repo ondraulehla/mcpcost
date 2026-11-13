@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { latestRun, serversWithError } from '../../lib/db';
+import { FIXES, GUIDE, pypiPackage } from '../../lib/fixes';
+import { num, date } from '../../lib/format';
+
+// One page per start-up error of mcp 2.x (src/lib/fixes.ts): the text people paste into a search engine, the cause,
+// the fix, and the registry servers that stop with it today. The list changes once a day, with the probe run.
+const fix = FIXES.find((f) => f.slug === Astro.params.slug);
+if (!fix) return new Response('Not found', { status: 404 });
+Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
+
+const [servers, run] = await Promise.all([serversWithError(fix.like), latestRun(['topHosts', 'changes', 'heaviest'])]);
+const withPin = servers.filter((s) => s.status === 'needs_old_sdk');
+const stopped = servers.filter((s) => s.status !== 'needs_old_sdk');
+const measured = run ? date(run.probedAt) : '';
+const others = FIXES.filter((f) => f.slug !== fix.slug);
+const example = '<package>';
+
+const summary = `${fix.changed} A package that was written for mcp 1.x and asks for mcp with no upper bound gets mcp 2.x from a plain install and stops at start-up.`;
+const publisherFix = 'Change the code as the migration guide shows, or keep the package on mcp 1.x with an upper bound in the dependencies, for example mcp>=1.2,<2, and publish a new version.';
+const userFix = `Install the package with mcp below 2, for example: uvx --with "mcp<2" ${example}`;
+const faq = [
+  { q: `What does “${fix.error}” mean?`, a: summary },
+  { q: 'How do I fix it in my own server?', a: publisherFix },
+  { q: 'How do I start a server that has this error, when it is not my package?', a: `${userFix}. Then tell the publisher: the fix is one line in the dependencies.` },
+  ...(servers.length ? [{ q: 'How many MCP servers have this error?', a: `${num(servers.length)} PyPI package servers in the official MCP registry stopped with this error in the daily probe of ${measured}.${fix.retried && withPin.length ? ` ${num(withPin.length)} of them start and list their tools when the probe installs them with mcp<2.` : ''}` }] : [])
+];
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  dateModified: run?.probedAt
+};
+const row = (s: (typeof servers)[number]) => ({ name: s.name, title: s.title, pkg: pypiPackage(s.url) });
+---
+
+<Layout title={`${fix.error}: the fix for mcp 2.x`} description={`${fix.changed} The fix, and the ${num(servers.length)} servers of the MCP registry that stop with this error today.`.slice(0, 300)} jsonld={jsonld}>
+  <p class="kicker">mcp 2.x · python sdk</p>
+  <h1 class="error-h break">{fix.error}</h1>
+  <p class="lede">{summary}</p>
+  {fix.alsoSeenAs && (
+    <p class="muted small">The same cause gives: {fix.alsoSeenAs.map((e, i) => <>{i ? ', ' : ''}<code class="break">{e}</code></>)}.</p>
+  )}
+
+  <section class="panel" aria-labelledby="user-h">
+    <h2 id="user-h" class="panel-title">You only want to start the server</h2>
+    <p>Install the package with the Python SDK below 2. With uv:</p>
+    <pre>{`uvx --with "mcp<2" ${example}`}</pre>
+    <p>With pip, in the environment of the server:</p>
+    <pre>{`pip install "mcp<2"`}</pre>
+    <p class="muted small">In an MCP client config, put <code>--with</code> and <code>mcp&lt;2</code> in front of the package name in the <code>args</code> of <code>uvx</code>. {fix.retried ? 'The daily probe does the same: it installs a package that stops with this error once more with this pin.' : 'The SDK keeps the 1.x line supplied with critical fixes.'}</p>
+  </section>
+
+  <section class="panel" aria-labelledby="publisher-h">
+    <h2 id="publisher-h" class="panel-title">You publish the server</h2>
+    <p>You have two fixes. The fast one is an upper bound in the dependencies of the package, then a new release:</p>
+    <pre>{`dependencies = ["mcp>=1.2,<2"]`}</pre>
+    <p>The SDK's migration guide says the same: keep a <code>&lt;2</code> upper bound until you have moved your code. The full fix is the move to mcp 2.x. Before:</p>
+    <pre>{fix.before}</pre>
+    <p>After:</p>
+    <pre>{fix.after}</pre>
+    <ul>
+      {fix.notes.map((n) => <li>{n}</li>)}
+    </ul>
+    <p class="muted small">Source: <a href={fix.guide} rel="noopener">the section of the migration guide</a> of the MCP Python SDK. mcp 2.0.0 came to PyPI on 28 July 2026. The examples are the guide's own.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="servers-h">
+    <h2 id="servers-h" class="panel-title">Servers with this error <small>{measured}</small></h2>
+    {servers.length === 0 && <p>No PyPI package server in the official MCP registry stopped with this error in the newest daily probe.</p>}
+    {servers.length > 0 && (
+      <p>
+        {num(servers.length)} PyPI package {servers.length === 1 ? 'server' : 'servers'} in the official MCP registry stopped with this error in the newest daily probe.
+        The probe installs each package in a container as a client does, with no version pins, and starts it.
+        {fix.retried && withPin.length > 0 && <> {num(withPin.length)} of them start and list their tools when the probe installs them once more with <code>mcp&lt;2</code>.</>}
+      </p>
+    )}
+    {fix.retried && withPin.length > 0 && (
+      <>
+        <h3>Start with mcp&lt;2 ({num(withPin.length)})</h3>
+        <ul class="cols">
+          {withPin.map(row).map((s) => <li><a href={`/s/${s.name}`} class="break">{s.title ?? s.name}</a>{s.pkg && <> <span class="faint mono break">{s.pkg}</span></>}</li>)}
+        </ul>
+      </>
+    )}
+    {stopped.length > 0 && (
+      <>
+        {fix.retried && withPin.length > 0 && <h3>Stop at start-up ({num(stopped.length)})</h3>}
+        <ul class="cols">
+          {stopped.map(row).map((s) => <li><a href={`/s/${s.name}`} class="break">{s.title ?? s.name}</a>{s.pkg && <> <span class="faint mono break">{s.pkg}</span></>}</li>)}
+        </ul>
+      </>
+    )}
+    <p class="muted small">Is your server in the list after a fix? Its page updates with the next weekly check of the package. <a href="/methodology">How the probe works</a>.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="more-h">
+    <h2 id="more-h" class="panel-title">Other errors of mcp 2.x</h2>
+    <ul>
+      {others.map((f) => <li><a href={`/errors/${f.slug}`} class="break mono">{f.error}</a></li>)}
+    </ul>
+    <p class="muted small"><a href="/errors">All of them, with counts</a>. The full list of changes is in the <a href={GUIDE} rel="noopener">migration guide</a>.</p>
+  </section>
+</Layout>
+
+<style>
+  .error-h { font-family: var(--font-mono); font-size: clamp(1.25rem, 3.2vw, 2rem); font-weight: 600; line-height: 1.3; margin: 0.75rem 0 0; }
+  .cols { columns: 2 22rem; column-gap: 2rem; padding-left: 1.1rem; }
+  .cols li { break-inside: avoid; margin: 0 0 0.3rem; }
+</style>

@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Rendered by the Worker, not prerendered: see methodology.astro. The page reads no data; the cache keeps it a day.
+Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
+const updated = '13 November 2026';
+---
+
+<Layout title="Privacy policy" description="What mcpcost, its website, its API and its MCP server collect, why, who gets it and for how long. No accounts, no cookies, no advertising.">
+  <p class="kicker">privacy</p>
+  <h1 class="poster">Privacy policy</h1>
+  <p class="lede">mcpcost has no accounts, no cookies and no advertising. It measures public MCP servers, not people. This page says what data it gets from you and what it does with it.</p>
+  <p class="muted small">Last change: {updated}. This policy applies to the website mcpcost.ulehla.dev, its JSON API and its MCP server at <span class="mono">https://mcpcost.ulehla.dev/mcp</span>.</p>
+
+  <section class="panel" aria-labelledby="who-h">
+    <h2 id="who-h" class="panel-title">Who is responsible</h2>
+    <p>mcpcost is an open-source project of Ondřej Úlehla, Czech Republic (<a href="https://ulehla.dev" rel="noopener">ulehla.dev</a>). He is the controller of the data that this page lists. For a question or a request, open an issue at <a href="https://github.com/ondraulehla/mcpcost/issues" rel="noopener">github.com/ondraulehla/mcpcost</a>. Do not put personal data in the issue: say what you need, and you get a private way to continue.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="mcp-h">
+    <h2 id="mcp-h" class="panel-title">The MCP server and the API</h2>
+    <p>The MCP server has five tools. All of them read; none changes data. It needs no sign-in and it does not know who you are.</p>
+    <dl class="facts">
+      <dt>What it gets</dt><dd>The arguments of a tool call: a server name, search words, or the URL of an MCP server. It does not get your conversation, your prompts, your files or your memory. It asks for nothing more than a tool needs.</dd>
+      <dt>What it keeps</dt><dd>Nothing in its database. A tool call writes no row. The host's request log keeps the address of the request for some days (see “The host” below).</dd>
+      <dt>check_server</dt><dd>This tool, and the live check on the website, connects to the URL you give. It sends <code>initialize</code> and <code>tools/list</code> with the client name <code>mcpcost</code> and no credentials. The operator of that server sees a request from Cloudflare's network, not from you. To count tokens, the tool definitions that the server returns go to the token counting endpoint of Anthropic. That endpoint counts and does not run a model. Give only URLs of servers that are public.</dd>
+      <dt>The answers</dt><dd>The answers hold data about MCP servers: status, tool names, token counts. They hold no data about you.</dd>
+    </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="site-h">
+    <h2 id="site-h" class="panel-title">The website</h2>
+    <dl class="facts">
+      <dt>Cookies</dt><dd>None. The choice of the light or dark theme stays in your browser (<code>localStorage</code>) and is not sent to us.</dd>
+      <dt>Visit counts</dt><dd>Cloudflare Web Analytics counts page views. It sets no cookie, makes no fingerprint and follows nobody from site to site. We see totals: pages, referrers, countries.</dd>
+      <dt>E-mail alerts</dt><dd>When you ask for alerts on a server, we keep your e-mail address, the server name, the times you asked, confirmed and stopped, and a hash of your network address that changes each month and stops misuse of the form. We use the address for the confirmation mail and the alerts, nothing else. A mail service (Resend) sends the mails for us. Each mail has a link that stops the alerts. A stopped alert stays in the database with its stop time; ask, and we delete the row.</dd>
+      <dt>Tracked servers</dt><dd>When you add a server outside the registry from the Check page, its URL goes on the public board and into <span class="mono">/api/tracked.json</span>. We keep the same monthly hash of your network address with it. Do not add a URL that must stay secret.</dd>
+    </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="host-h">
+    <h2 id="host-h" class="panel-title">The host</h2>
+    <p>The site runs on Cloudflare Workers with a Cloudflare D1 database. Cloudflare handles each request and keeps request logs (network address, user agent, URL, time) for some days. We read them as totals per network and per crawler to keep the site up, and we block crawlers that overload it. We do not sell data, we do not give it to advertisers and we do not use it to train models.</p>
+    <p>The companies that process data for the site: Cloudflare (hosting, logs, visit counts), Resend (alert mails), Anthropic (token counts of tool definitions) and GitHub (source code, issues, the daily probe). Some of them process data outside the European Union under their own terms.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="board-h">
+    <h2 id="board-h" class="panel-title">Data about MCP servers</h2>
+    <p>The board shows what public MCP servers answer to a client without credentials, and what the official MCP registry publishes about them: names, URLs, repository links, tool names and descriptions. This is data about software, published by its makers. If an entry shows something about you that must not be public, open an issue and we remove it.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="rights-h">
+    <h2 id="rights-h" class="panel-title">Your rights</h2>
+    <p>The law of the European Union (GDPR) gives you the right to get the data we hold about you, to have it corrected or deleted, to object to its use and to complain to a supervisory authority, in the Czech Republic the Office for Personal Data Protection (uoou.gov.cz). The legal basis for alerts is your consent, which the stop link takes back. For logs and visit counts it is our legitimate interest in a site that stays up.</p>
+    <p class="muted small">The board is for developers. It is not made for children. When this policy changes, the date at the top changes, and the history is in the <a href="https://github.com/ondraulehla/mcpcost/commits/main/site/src/pages/privacy.astro" rel="noopener">repository</a>.</p>
+  </section>
+</Layout>

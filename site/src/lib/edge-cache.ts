@@ -70,7 +70,10 @@ const BLOCKED_AGENTS = /ShapBot|SemrushBot|DataForSeoBot|AhrefsBot|MJ12bot|DotBo
 const LIST_SCRAPER_NETWORKS = /RapidSeedbox|Alibaba|Meta Platforms/i;
 
 
-/** A 403 for a blocked crawler or a list scraper, a 301 for an old host, or null to go on. Cheap: no database. */
+/** Paths with no page of their own, and the page that answers what their visitors ask. */
+const MOVED: Record<string, string> = { '/pricing': '/tokens', '/privacy-policy': '/privacy', '/docs': '/connect' };
+
+/** A 403 for a blocked crawler or a list scraper, a 301 for an old host or a moved path, or null to go on. Cheap: no database. */
 export function gate(request: Request): Response | null {
   const url = new URL(request.url);
   if (BLOCKED_AGENTS.test(request.headers.get('user-agent') ?? '')) {
@@ -86,6 +89,12 @@ export function gate(request: Request): Response | null {
     url.hostname = CANONICAL_HOST;
     url.protocol = 'https:';
     url.port = '';
+    return Response.redirect(url.toString(), 301);
+  }
+  // Addresses that people type or follow and the board never had. /pricing: searches for "mcp server pricing" end here.
+  const moved = MOVED[url.pathname];
+  if (moved) {
+    url.pathname = moved;
     return Response.redirect(url.toString(), 301);
   }
   return null;

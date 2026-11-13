@@ -145,6 +145,7 @@ const beaconToken = import.meta.env.DEV ? '' : ((env as unknown as { CF_BEACON_T
               {nav.map(([href, text]) => (
                 <a href={href} aria-current={path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined}>{text}</a>
               ))}
+              <a href="/connect" aria-current={path === '/connect' ? 'page' : undefined}>Connect</a>
               <a href="https://github.com/ondraulehla/mcpcost" rel="noopener">GitHub</a>
               <a href="https://www.npmjs.com/package/mcpcost" rel="noopener">npx mcpcost</a>
             </nav>
@@ -222,6 +223,9 @@ const beaconToken = import.meta.env.DEV ? '' : ((env as unknown as { CF_BEACON_T
           <span>© {year} Ondřej Úlehla</span>
         </a>
         <nav aria-label="Footer" class="foot-cells">
+          <a href="/connect" class="cell-flood cell-text">Connect</a>
+          <a href="/errors" class="cell-flood cell-text">mcp 2.x errors</a>
+          <a href="/privacy" class="cell-flood cell-text">Privacy</a>
           <a href="https://ulehla.dev" rel="me noopener" class="cell-flood cell-text">ulehla.dev</a>
         </nav>
       </div>
@@ -378,6 +382,13 @@ const beaconToken = import.meta.env.DEV ? '' : ((env as unknown as { CF_BEACON_T
   .emblem { width: 1.5rem; height: 1.5rem; flex: 0 0 auto; color: var(--accent); transition: transform 0.5s cubic-bezier(0, 0, 0.2, 1); }
   .brand-foot:hover .emblem { transform: rotate(45deg); }
   .foot-cells { display: flex; align-items: stretch; }
+  /* A narrow screen: the name on its own row, the links under it in one row that shares the width. */
+  @media (max-width: 760px) {
+    .foot-row { flex-direction: column; }
+    .foot-cells { border-top: 1px solid var(--line); flex-wrap: wrap; }
+    .foot-cells .cell-text { flex: 1 1 auto; min-height: 3rem; padding: 0 0.75rem; letter-spacing: 0.08em; }
+    .foot-cells .cell-text:first-child { border-left: 0; }
+  }
 
   main { width: 100%; max-width: 72rem; margin: 0 auto; padding: clamp(3rem, 6vw, 5rem) var(--gutter) 5rem; }
 

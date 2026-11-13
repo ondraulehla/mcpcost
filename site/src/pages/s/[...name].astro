@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { serverPage, similarByTitle, listingsOf, bundleOf } from '../../lib/db';
 import { bucket, label, ms, num, tokens, date, windowShare, modelName } from '../../lib/format';
+import { fixFor } from '../../lib/fixes';
 
 const name = Astro.params.name ?? '';
 // One round trip for the row, its history, its siblings, whether it ever answered, and the latest run.
@@ -64,6 +65,8 @@ const pinnedCost = pinned ? (server.claude_tokens ?? server.tools_tokens) : null
 const pinnedExact = pinned && server.claude_tokens != null;
 /** The package stopped at the import of FastMCP, which mcp 2.0 renamed to MCPServer (FASTMCP_MOVED in probe/stdio-classify.ts). */
 const fastmcpMoved = /No module named '?mcp\.server\.fastmcp/.test(server.error ?? '');
+/** A start-up error of mcp 2.x that has a page of its own under /errors (src/lib/fixes.ts). */
+const fix = server.url.startsWith('pypi:') ? fixFor(server.error) : undefined;
 /** How a user starts a package: npx, uvx (with the pin it needs), or docker for an OCI image. An MCPB bundle is a file to open in a client. */
 const runIt = server.url.startsWith('npm:')
   ? `npx -y ${server.url.slice(4)}`
@@ -452,6 +455,7 @@ const jsonld = {
     <ul>
       {hints.map((h) => <li>{h}</li>)}
     </ul>
+    {fix && <p>The cause and the fix, with the code before and after: <a href={`/errors/${fix.slug}`} class="break mono">{fix.error}</a></p>}
     {probeNow && <p class="muted small">Fixed something? <a href={probeNow}>Probe it now</a>, with the same steps as the daily run. This page updates with the next daily run.</p>}
   </section>
 

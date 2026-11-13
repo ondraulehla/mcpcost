@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Rendered by the Worker, not prerendered: see methodology.astro. The page reads no data; the cache keeps it a day.
+Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
+const url = 'https://mcpcost.ulehla.dev/mcp';
+const tools: Array<{ name: string; title: string; does: string; ask: string }> = [
+  { name: 'lookup_server', title: 'Look up a registry server', does: 'The newest daily probe of one server: status, how a client gets access, the exact token cost of its tools in Claude, the tool count, the latency and its most expensive tools.', ask: 'Is the GitHub MCP server up, and how many tokens do its tools cost?' },
+  { name: 'search_servers', title: 'Search the registry board', does: 'Servers by words in their name, title, description or host, with filters, sorted by token cost.', ask: 'Find MCP servers for Postgres that answer without auth, the cheapest first.' },
+  { name: 'compare_servers', title: 'Compare servers side by side', does: 'Two to five servers next to each other: status, access, tools, token cost, share of a 200k context window.', ask: 'Compare the token cost of the Notion, Linear and Atlassian MCP servers.' },
+  { name: 'check_server', title: 'Probe a server live', does: 'Connects to a public MCP URL now, with no credentials, and reports status, protocol, tools and token cost.', ask: 'Check https://example.com/mcp: does it answer, and what do its tools cost?' },
+  { name: 'registry_summary', title: 'Registry summary', does: 'The totals of the newest run: how many servers answer and why the others do not, token cost percentiles, auth, protocols, the biggest publishers.', ask: 'How many servers in the MCP registry answer today, and what does the median server cost?' }
+];
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'mcpcost',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Any',
+  url: 'https://mcpcost.ulehla.dev/connect',
+  description: 'An MCP server that tells an AI assistant whether an MCP server is up and how many context tokens its tools cost, from a daily probe of the official MCP registry.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+};
+---
+
+<Layout title="Connect mcpcost to Claude, ChatGPT and other MCP clients" description="mcpcost is an MCP server too: five read-only tools that tell your assistant whether an MCP server is up and what its tools cost in context tokens. No sign-in. How to add it and what to ask." jsonld={jsonld}>
+  <p class="kicker">connect</p>
+  <h1 class="poster">Ask your assistant</h1>
+  <p class="lede">mcpcost is an MCP server too. Add it to your assistant and ask if an MCP server is up, how a client gets access and how many context tokens its tools cost. Five tools, all read-only, no sign-in, free.</p>
+
+  <section class="panel" aria-labelledby="add-h">
+    <h2 id="add-h" class="panel-title">Add it</h2>
+    <p>The server speaks Streamable HTTP and needs no authentication. The URL:</p>
+    <pre>{url}</pre>
+    <dl class="facts">
+      <dt>Claude</dt><dd>Open Settings, then Connectors, then “Add custom connector”. Give the name <span class="mono">mcpcost</span> and the URL above. It works in Claude on the web and on the desktop.</dd>
+      <dt>Claude Code</dt><dd><code>claude mcp add --transport http mcpcost {url}</code></dd>
+      <dt>ChatGPT</dt><dd>In developer mode, add a custom connector (app) with the URL above and no authentication.</dd>
+      <dt>Other clients</dt><dd>Cursor, VS Code, Windsurf and other clients that take a remote server: add an entry with the URL above to the MCP config of the client.</dd>
+      <dt>Local</dt><dd><code>npx -y mcpcost mcp</code> starts a stdio server with the four tools that read the board, and with two tools that measure a server or your own config on your machine. <a href="https://www.npmjs.com/package/mcpcost" rel="noopener">The package on npm</a>.</dd>
+    </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="tools-h">
+    <h2 id="tools-h" class="panel-title">The tools, and what to ask</h2>
+    <dl class="facts">
+      {tools.map((t) => (
+        <>
+          <dt><span class="mono">{t.name}</span></dt>
+          <dd><b>{t.title}.</b> {t.does}<br /><span class="muted">Ask: “{t.ask}”</span></dd>
+        </>
+      ))}
+    </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="data-h">
+    <h2 id="data-h" class="panel-title">Where the answers come from</h2>
+    <p>The board probes each server of the <a href="https://registry.modelcontextprotocol.io" rel="noopener">official MCP registry</a> once a day: remote servers over the network, npm and PyPI package servers in a container. Token counts for Claude are exact, from the Anthropic <code>count_tokens</code> endpoint. Four tools read that data and connect to nothing. <span class="mono">check_server</span> connects to the URL you give, with no credentials, and waits 10 seconds at most. <a href="/methodology">How the probe works</a>.</p>
+    <dl class="facts">
+      <dt>Limits</dt><dd>Only public https URLs. No tool changes data, sends a message or spends money. Answers are JSON of a few kilobytes; a search page holds 20 servers at most.</dd>
+      <dt>Privacy</dt><dd>The server gets the arguments of a tool call and nothing else. It keeps nothing in its database. <a href="/privacy">Privacy policy</a>.</dd>
+      <dt>Support</dt><dd>Open an issue at <a href="https://github.com/ondraulehla/mcpcost/issues" rel="noopener">github.com/ondraulehla/mcpcost</a>. The source is there too, under the MIT licence.</dd>
+    </dl>
+  </section>
+</Layout>

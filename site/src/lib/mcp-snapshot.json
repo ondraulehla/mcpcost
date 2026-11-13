@@ -15,7 +15,25 @@
     },
     "serverInfo": {
       "name": "mcpcost",
-      "version": "0.2.0"
+      "title": "mcpcost",
+      "version": "0.3.4",
+      "websiteUrl": "https://mcpcost.ulehla.dev/connect",
+      "icons": [
+        {
+          "src": "https://mcpcost.ulehla.dev/icon-512.png",
+          "mimeType": "image/png",
+          "sizes": [
+            "512x512"
+          ]
+        },
+        {
+          "src": "https://mcpcost.ulehla.dev/favicon.svg",
+          "mimeType": "image/svg+xml",
+          "sizes": [
+            "any"
+          ]
+        }
+      ]
     },
     "instructions": "Health and token cost of every remote server in the official MCP registry, and of its npm and PyPI package servers, probed daily. Use lookup_server for a registry name or URL, search_servers to find servers, compare_servers to put two to five next to each other, check_server to probe a URL that is not in the registry. claudeTokens is the exact count from the Anthropic count_tokens endpoint (claudeTokensClaudeCode with the mcp__<server>__ prefix); toolsTokens is an o200k_base estimate over each tool definition."
   },

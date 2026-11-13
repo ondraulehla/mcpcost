@@ -82,12 +82,13 @@ The plugin adds one skill, `/mcpcost:measure`, which runs `npx mcpcost` on your 
 - **Track**: a server that is not in the registry can be tracked from the check page; the daily probe then measures it under the name `url/<host>/<path>`
 - **Hosts**: the 500 biggest publishers with how many distinct tool sets they actually serve
 - **Report**: one page a month, *The state of the MCP registry*, read from the daily runs, with a CC BY 4.0 dataset of every server
+- **Errors**: `/errors` has one page per start-up error of PyPI servers after mcp 2.0, the Python SDK (`No module named 'mcp.server.fastmcp'` and four more): the cause, the fix, and the registry servers that stop with it in the newest run. The texts and the fixes are in `site/src/lib/fixes.ts`
 
 ## For agents and scripts
 
 - JSON: `/api/s/<name>.json`, `/api/lookup.json?url=…` (the board's row for an endpoint URL, no probe), `/api/servers.json?q=…&status=ok&sort=tokens`, `/api/check.json?url=…`, `/api/summary.json`. The list API takes at most 6 requests in 10 seconds from one address; its answers are cached for three hours.
 - Re-check evidence for the registry, the newest run: `/data/mcpcost-evidence-latest.json.gz` (the row shape of modelcontextprotocol/registry#1715, changes after each daily run), with its index `/data/mcpcost-evidence-latest.index.json`.
-- MCP server over Streamable HTTP, no auth: `https://mcpcost.ulehla.dev/mcp` with the tools `lookup_server`, `search_servers`, `compare_servers`, `check_server`, `registry_summary`. The manifest for the registry is `site/server.json`.
+- MCP server over Streamable HTTP, no auth: `https://mcpcost.ulehla.dev/mcp` with the tools `lookup_server`, `search_servers`, `compare_servers`, `check_server`, `registry_summary`. The manifest for the registry is `site/server.json`. `/connect` says how to add it to Claude, ChatGPT and other clients and what to ask; `/privacy` is the privacy policy that the connector directories ask for. The icon of the server is `site/public/icon-512.png`, drawn from the favicon by `site/scripts/icon.ts`.
 - `/llms.txt` lists all of it. `/tokens` answers the general question: how many context tokens does an MCP server cost.
 
 Each server on the board gets a page and a badge:

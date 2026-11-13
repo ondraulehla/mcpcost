@@ -9,6 +9,7 @@ import { payloadBytes, BYTES_PER_TOKEN } from '../../../packages/mcpcost/src/pay
 import { liveClaudeCount } from './claude';
 import { formatComparison } from '../../../packages/mcpcost/src/compare.ts';
 import { compareOnBoard } from './compare';
+import pkg from '../../../packages/mcpcost/package.json';
 
 const SITE = 'https://mcpcost.ulehla.dev';
 
@@ -46,7 +47,17 @@ type RegisterTool = <Args>(
  */
 function build(): McpServer {
   const server = new McpServer(
-    { name: 'mcpcost', version: '0.2.0' },
+    {
+      name: 'mcpcost',
+      title: 'mcpcost',
+      // The version of the package, which has the same board tools (packages/mcpcost/src/mcp.ts).
+      version: pkg.version,
+      websiteUrl: `${SITE}/connect`,
+      icons: [
+        { src: `${SITE}/icon-512.png`, mimeType: 'image/png', sizes: ['512x512'] },
+        { src: `${SITE}/favicon.svg`, mimeType: 'image/svg+xml', sizes: ['any'] }
+      ]
+    },
     {
       instructions:
         'Health and token cost of every remote server in the official MCP registry, and of its npm and PyPI package servers, probed daily. Use lookup_server for a registry name or URL, search_servers to find servers, compare_servers to put two to five next to each other, check_server to probe a URL that is not in the registry. claudeTokens is the exact count from the Anthropic count_tokens endpoint (claudeTokensClaudeCode with the mcp__<server>__ prefix); toolsTokens is an o200k_base estimate over each tool definition.'

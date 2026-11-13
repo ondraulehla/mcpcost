@@ -312,6 +312,35 @@ export async function findByUrl(url: string): Promise<string | null> {
   return row?.name ?? null;
 }
 
+/** A PyPI package server whose daily probe ended with a known start-up error. See src/lib/fixes.ts. */
+export type ErrorServer = Pick<ServerRecord, 'name' | 'title' | 'url' | 'status' | 'tool_count'>;
+
+/**
+ * The PyPI package servers whose error text has one of the LIKE patterns, by name. A package the probe could start
+ * with mcp<2 has the status needs_old_sdk and keeps the error of the plain install. The status index holds the read
+ * to the crashed and needs_old_sdk rows (a few thousand), not the whole table.
+ */
+export async function serversWithError(likes: string[]): Promise<ErrorServer[]> {
+  if (!likes.length) return [];
+  const { results } = await db()
+    .prepare(`SELECT name, title, url, status, tool_count FROM servers WHERE status IN ('crashed', 'needs_old_sdk') AND url LIKE 'pypi:%' AND (${likes.map(() => 'error LIKE ?').join(' OR ')}) ORDER BY name`)
+    .bind(...likes)
+    .all<ErrorServer>();
+  return results;
+}
+
+/** How many PyPI package servers have each error: one read for the index page. The keys are the callers' own. */
+export async function countServersWithErrors(patterns: Record<string, string[]>): Promise<Record<string, number>> {
+  const keys = Object.keys(patterns).filter((k) => patterns[k].length);
+  if (!keys.length) return {};
+  const sums = keys.map((k, i) => `sum(CASE WHEN ${patterns[k].map(() => 'error LIKE ?').join(' OR ')} THEN 1 ELSE 0 END) AS c${i}`);
+  const row = await db()
+    .prepare(`SELECT ${sums.join(', ')} FROM servers WHERE status IN ('crashed', 'needs_old_sdk') AND url LIKE 'pypi:%'`)
+    .bind(...keys.flatMap((k) => patterns[k]))
+    .first<Record<string, number | null>>();
+  return Object.fromEntries(keys.map((k, i) => [k, row?.[`c${i}`] ?? 0]));
+}
+
 /** Registry servers on the same host, for a URL that is not registered as is. */
 export async function serversOnHost(host: string, limit = 8): Promise<Array<Pick<ServerRecord, 'name' | 'url' | 'status'>>> {
   const { results } = await db()
