@@ -1,79 +1,79 @@
 {
-  "probedAt": "2026-11-20T12:49:03.280Z",
+  "probedAt": "2026-11-21T12:14:57.195Z",
   "requestedProtocolVersion": "2025-11-25",
-  "registryEntries": 68898,
+  "registryEntries": 69497,
   "tracked": 6,
   "listed": 154,
-  "registryWithRemote": 46681,
-  "registryWithPackage": 18856,
-  "stdioProbed": 20941,
-  "stdioToday": 4099,
-  "fastmcpMoved": 782,
-  "probed": 67504,
+  "registryWithRemote": 47197,
+  "registryWithPackage": 18907,
+  "stdioProbed": 21028,
+  "stdioToday": 4182,
+  "fastmcpMoved": 781,
+  "probed": 68109,
   "unprobed": {
     "none": 698,
     "nuget": 157,
-    "oci": 154,
-    "remote": 119,
+    "oci": 156,
+    "remote": 121,
     "cargo": 113,
-    "npm": 99,
-    "pypi": 47,
+    "npm": 91,
+    "pypi": 45,
     "mcpb": 7
   },
   "byStatus": {
-    "ok": 38617,
-    "auth": 14654,
-    "crashed": 3080,
-    "not_found": 2238,
-    "timeout": 1787,
-    "unprobed": 1394,
-    "needs_env": 1200,
-    "protocol_error": 843,
-    "dns": 817,
-    "needs_old_sdk": 689,
-    "server_error": 605,
-    "needs_args": 576,
-    "install_failed": 501,
-    "needs_url": 348,
-    "tls": 343,
-    "needs_network": 288,
+    "ok": 38932,
+    "auth": 14808,
+    "crashed": 3090,
+    "not_found": 2255,
+    "timeout": 1793,
+    "unprobed": 1388,
+    "needs_env": 1204,
+    "protocol_error": 842,
+    "dns": 828,
+    "needs_old_sdk": 688,
+    "server_error": 588,
+    "needs_args": 582,
+    "install_failed": 503,
+    "needs_url": 353,
+    "tls": 351,
+    "needs_network": 289,
+    "rate_limited": 273,
     "error": 250,
-    "rate_limited": 205,
+    "payment": 188,
     "no_bin": 186,
-    "payment": 174,
-    "refused": 46,
+    "refused": 48,
     "newer_protocol": 43,
-    "unsupported_version": 14
+    "unsupported_version": 15
   },
   "noAnswer": {
-    "not_found": 377,
-    "timeout": 277,
-    "protocol_error": 269,
-    "rate_limited": 205,
-    "crashed": 89,
-    "server_error": 60,
-    "dns": 17,
-    "error": 13,
-    "tls": 6,
-    "refused": 4,
-    "install_failed": 3,
+    "not_found": 371,
+    "rate_limited": 273,
+    "protocol_error": 206,
+    "timeout": 203,
+    "crashed": 88,
+    "server_error": 43,
+    "dns": 27,
+    "error": 10,
+    "refused": 7,
+    "install_failed": 5,
+    "tls": 2,
     "no_bin": 1
   },
-  "reachable": 56603,
-  "ok": 38617,
-  "uniqueToolsets": 35974,
-  "duplicateServers": 2643,
+  "reachable": 57102,
+  "ok": 38932,
+  "uniqueToolsets": 36263,
+  "duplicateServers": 2669,
   "protocols": {
-    "2025-11-25": 17937,
-    "unknown": 13812,
-    "2025-06-18": 3329,
-    "2025-03-26": 2851,
+    "2025-11-25": 18096,
+    "unknown": 13872,
+    "2025-06-18": 3370,
+    "2025-03-26": 2906,
     "2024-11-05": 688
   },
   "authSchemes": {
-    "Bearer": 13008,
-    "none": 1606,
-    "ApiKey": 19,
+    "Bearer": 13145,
+    "none": 1624,
+    "ApiKey": 18,
     "AzureApiManagementKey": 7,
     "Basic": 4,
     "Key": 2,
@@ -85,27 +85,27 @@
     "RoseMember": 1
   },
   "authKinds": {
-    "oauth-dcr": 12067,
-    "unknown": 1331,
-    "oauth": 694,
-    "token": 562
+    "oauth-dcr": 12208,
+    "unknown": 1346,
+    "oauth": 693,
+    "token": 561
   },
   "transports": {
-    "streamable-http": 45816,
-    "stdio": 20941,
-    "sse": 747
+    "streamable-http": 46335,
+    "stdio": 21028,
+    "sse": 746
   },
   "toolsTokens": {
-    "median": 1465,
-    "p90": 11988,
-    "p99": 34085,
+    "median": 1471,
+    "p90": 11990,
+    "p99": 33738,
     "max": 1073478,
-    "total": 189194504
+    "total": 191882295
   },
   "claudeTokens": {
     "model": "claude-opus-5-5",
-    "counted": 38071,
-    "refused": 487,
+    "counted": 38388,
+    "refused": 485,
     "histogram": {
       "edges": [
         500,
@@ -118,65 +118,65 @@
         100000
       ],
       "bins": [
-        3293,
-        5052,
-        7414,
-        9936,
-        4046,
-        4351,
-        3518,
-        310,
-        151
+        3299,
+        5120,
+        7451,
+        10057,
+        4094,
+        4363,
+        3537,
+        313,
+        154
       ]
     },
-    "median": 2523,
-    "p90": 20639,
-    "p99": 56069,
+    "median": 2533,
+    "p90": 21009,
+    "p99": 56059,
     "max": 2054606,
-    "total": 312675510,
+    "total": 317125586,
     "claudeCode": {
-      "median": 2609,
-      "p90": 21297,
-      "p99": 57067,
+      "median": 2616,
+      "p90": 21382,
+      "p99": 56922,
       "max": 2055214,
-      "total": 319877984
+      "total": 324447650
     },
     "ratioToEstimate": {
-      "median": 1.7440982058545798,
-      "p10": 1.621301775147929,
-      "p90": 1.8695836873406966
+      "median": 1.743718592964824,
+      "p10": 1.6210794009607234,
+      "p90": 1.8694444444444445
     }
   },
   "toolCount": {
     "median": 8,
-    "p90": 36,
+    "p90": 37,
     "max": 2000
   },
   "initMs": {
-    "median": 368,
-    "p90": 1800
+    "median": 446,
+    "p90": 1986
   },
-  "hosts": 35260,
+  "hosts": 35604,
   "topHosts": [
     {
       "host": "npmjs.com",
-      "servers": 13690,
-      "ok": 10441,
-      "gated": 1082,
-      "dead": 2121,
-      "noAnswer": 46,
-      "uniqueToolsets": 9399,
-      "medianTokens": 1302
+      "servers": 13735,
+      "ok": 10479,
+      "gated": 1086,
+      "dead": 2130,
+      "noAnswer": 40,
+      "uniqueToolsets": 9438,
+      "medianTokens": 1300
     },
     {
       "host": "pypi.org",
-      "servers": 5025,
-      "ok": 2359,
-      "gated": 1457,
-      "dead": 1196,
-      "noAnswer": 13,
-      "uniqueToolsets": 3005,
-      "medianTokens": 1769
+      "servers": 5038,
+      "ok": 2369,
+      "gated": 1460,
+      "dead": 1197,
+      "noAnswer": 12,
+      "uniqueToolsets": 3014,
+      "medianTokens": 1758
     },
     {
       "host": "agent-observatory-sensor.nolimit-observatory.workers.dev",
@@ -190,32 +190,32 @@
     },
     {
       "host": "gateway.pipeworx.io",
-      "servers": 1931,
-      "ok": 1429,
+      "servers": 1935,
+      "ok": 1432,
       "gated": 0,
-      "dead": 269,
-      "noAnswer": 233,
-      "uniqueToolsets": 1429,
-      "medianTokens": 27559
+      "dead": 320,
+      "noAnswer": 183,
+      "uniqueToolsets": 1432,
+      "medianTokens": 27711
     },
     {
       "host": "github.com",
-      "servers": 1474,
-      "ok": 467,
-      "gated": 141,
-      "dead": 814,
-      "noAnswer": 52,
-      "uniqueToolsets": 456,
+      "servers": 1495,
+      "ok": 474,
+      "gated": 142,
+      "dead": 819,
+      "noAnswer": 60,
+      "uniqueToolsets": 463,
       "medianTokens": 1300
     },
     {
       "host": "mcp.apify.com",
-      "servers": 1181,
-      "ok": 6,
-      "gated": 1174,
+      "servers": 1219,
+      "ok": 5,
+      "gated": 1214,
       "dead": 0,
-      "noAnswer": 1,
-      "uniqueToolsets": 6,
+      "noAnswer": 0,
+      "uniqueToolsets": 5,
       "medianTokens": 1980
     },
     {
@@ -230,13 +230,13 @@
     },
     {
       "host": "ghcr.io",
-      "servers": 672,
-      "ok": 464,
-      "gated": 61,
+      "servers": 680,
+      "ok": 469,
+      "gated": 63,
       "dead": 144,
-      "noAnswer": 3,
-      "uniqueToolsets": 425,
-      "medianTokens": 1516
+      "noAnswer": 4,
+      "uniqueToolsets": 432,
+      "medianTokens": 1575
     },
     {
       "host": "cotlet.dev",
@@ -253,8 +253,8 @@
       "servers": 276,
       "ok": 0,
       "gated": 0,
-      "dead": 109,
-      "noAnswer": 167,
+      "dead": 149,
+      "noAnswer": 127,
       "uniqueToolsets": 0,
       "medianTokens": 0
     },
@@ -276,7 +276,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 147,
-      "medianTokens": 4891
+      "medianTokens": 5854
     },
     {
       "host": "atoms.pipavia.com",
@@ -291,12 +291,12 @@
     {
       "host": "a2awire.com",
       "servers": 135,
-      "ok": 134,
-      "gated": 1,
+      "ok": 135,
+      "gated": 0,
       "dead": 0,
       "noAnswer": 0,
-      "uniqueToolsets": 67,
-      "medianTokens": 11776
+      "uniqueToolsets": 68,
+      "medianTokens": 11759
     },
     {
       "host": "textforagents.com",
@@ -316,7 +316,7 @@
       "dead": 41,
       "noAnswer": 0,
       "uniqueToolsets": 5,
-      "medianTokens": 11789
+      "medianTokens": 12594
     },
     {
       "host": "mcp.zovo.one",
@@ -336,15 +336,15 @@
       "dead": 35,
       "noAnswer": 2,
       "uniqueToolsets": 30,
-      "medianTokens": 1249
+      "medianTokens": 1253
     },
     {
       "host": "ukdata.reliness.co.uk",
       "servers": 66,
-      "ok": 34,
+      "ok": 33,
       "gated": 0,
       "dead": 0,
-      "noAnswer": 32,
+      "noAnswer": 33,
       "uniqueToolsets": 33,
       "medianTokens": 718
     },
@@ -376,7 +376,7 @@
       "dead": 4,
       "noAnswer": 0,
       "uniqueToolsets": 48,
-      "medianTokens": 169
+      "medianTokens": 1132
     },
     {
       "host": "mcp.jojapi.com",
@@ -409,6 +409,16 @@
       "medianTokens": 0
     },
     {
+      "host": "mcp.agentapigate.ai",
+      "servers": 40,
+      "ok": 40,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 305
+    },
+    {
       "host": "api.meok.ai",
       "servers": 39,
       "ok": 0,
@@ -429,6 +439,16 @@
       "medianTokens": 871
     },
     {
+      "host": "{host}",
+      "servers": 37,
+      "ok": 0,
+      "gated": 37,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
+    },
+    {
       "host": "www.edgethirteen.com",
       "servers": 35,
       "ok": 4,
@@ -439,14 +459,14 @@
       "medianTokens": 186
     },
     {
-      "host": "{host}",
-      "servers": 34,
-      "ok": 0,
-      "gated": 34,
+      "host": "store.agentexchange.work",
+      "servers": 35,
+      "ok": 2,
+      "gated": 0,
       "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
+      "noAnswer": 33,
+      "uniqueToolsets": 1,
+      "medianTokens": 20884
     },
     {
       "host": "nexgendata-mcp-proxy.steve-corbeil.workers.dev",
@@ -476,7 +496,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 32,
-      "medianTokens": 1097
+      "medianTokens": 1105
     },
     {
       "host": "mcp.aisa.one",
@@ -485,6 +505,16 @@
       "gated": 1,
       "dead": 31,
       "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
+    },
+    {
+      "host": "mcp.gotsimplified.com",
+      "servers": 29,
+      "ok": 0,
+      "gated": 28,
+      "dead": 0,
+      "noAnswer": 1,
       "uniqueToolsets": 0,
       "medianTokens": 0
     },
@@ -517,16 +547,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 27,
       "medianTokens": 1654
-    },
-    {
-      "host": "mcp.gotsimplified.com",
-      "servers": 27,
-      "ok": 0,
-      "gated": 27,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
     },
     {
       "host": "community.ukrdigital.org",
@@ -587,16 +607,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 22,
       "medianTokens": 2372
-    },
-    {
-      "host": "mcp.agentapigate.ai",
-      "servers": 20,
-      "ok": 20,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 306
     },
     {
       "host": "tanod.dev",
@@ -751,11 +761,11 @@
     {
       "host": "app.daedalmap.com",
       "servers": 14,
-      "ok": 10,
+      "ok": 7,
       "gated": 0,
       "dead": 0,
-      "noAnswer": 4,
-      "uniqueToolsets": 6,
+      "noAnswer": 7,
+      "uniqueToolsets": 5,
       "medianTokens": 1756
     },
     {
@@ -836,7 +846,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 1,
-      "medianTokens": 4871
+      "medianTokens": 5206
     },
     {
       "host": "www.gaipagents.com",
@@ -857,6 +867,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 12,
       "medianTokens": 2883
+    },
+    {
+      "host": "feeds.agentexchange.work",
+      "servers": 12,
+      "ok": 12,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 12,
+      "medianTokens": 187
     },
     {
       "host": "apick.app",
@@ -942,11 +962,21 @@
       "host": "mcp.finddatatech.cloud",
       "servers": 11,
       "ok": 0,
-      "gated": 10,
+      "gated": 9,
       "dead": 1,
-      "noAnswer": 0,
+      "noAnswer": 1,
       "uniqueToolsets": 0,
       "medianTokens": 0
+    },
+    {
+      "host": "149-56-208-69.sslip.io",
+      "servers": 11,
+      "ok": 11,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 11,
+      "medianTokens": 135
     },
     {
       "host": "api.klisten.co.kr",
@@ -959,6 +989,16 @@
       "medianTokens": 132
     },
     {
+      "host": "api.useapi.net",
+      "servers": 11,
+      "ok": 0,
+      "gated": 11,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
+    },
+    {
       "host": "homouniversalis.ai",
       "servers": 10,
       "ok": 10,
@@ -967,6 +1007,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 2,
       "medianTokens": 1639
+    },
+    {
+      "host": "opencurrent.ai",
+      "servers": 10,
+      "ok": 10,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 10,
+      "medianTokens": 239
     },
     {
       "host": "mcp.pianam.cn",
@@ -999,6 +1049,16 @@
       "medianTokens": 389
     },
     {
+      "host": "defi-route-intel.b2bintel-edge.workers.dev",
+      "servers": 10,
+      "ok": 10,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 2560
+    },
+    {
       "host": "x402-bazaar-rank.x402-bazaar-rank-worker.workers.dev",
       "servers": 10,
       "ok": 10,
@@ -1007,16 +1067,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 9,
       "medianTokens": 2722
-    },
-    {
-      "host": "store.agentexchange.work",
-      "servers": 10,
-      "ok": 8,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 2,
-      "uniqueToolsets": 7,
-      "medianTokens": 2646
     },
     {
       "host": "mcp.gmp.ai",
@@ -1066,7 +1116,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 9,
-      "medianTokens": 1439
+      "medianTokens": 1805
     },
     {
       "host": "www.stratalize.com",
@@ -1126,7 +1176,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 9,
-      "medianTokens": 7036
+      "medianTokens": 7589
     },
     {
       "host": "{tenant}.slxd.app",
@@ -1236,17 +1286,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 4115
-    },
-    {
-      "host": "api.useapi.net",
-      "servers": 8,
-      "ok": 0,
-      "gated": 8,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
+      "medianTokens": 4143
     },
     {
       "host": "agent365.svc.cloud.microsoft",
@@ -1296,17 +1336,17 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 7,
-      "medianTokens": 614
+      "medianTokens": 623
     },
     {
       "host": "api.brainiall.com",
       "servers": 7,
-      "ok": 2,
+      "ok": 3,
       "gated": 4,
       "dead": 0,
-      "noAnswer": 1,
-      "uniqueToolsets": 2,
-      "medianTokens": 4189
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 2768
     },
     {
       "host": "api.cheapxapi.com",
@@ -1357,6 +1397,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 7,
       "medianTokens": 25200
+    },
+    {
+      "host": "agent-spend-guard.b2bintel-edge.workers.dev",
+      "servers": 7,
+      "ok": 7,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 1484
     },
     {
       "host": "www.pathwren.workers.dev",
@@ -1526,7 +1576,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 1467
+      "medianTokens": 1539
     },
     {
       "host": "hatchloop.dev",
@@ -1549,24 +1599,34 @@
       "medianTokens": 0
     },
     {
-      "host": "llmrt-companion.manhliemcn4euwlu.workers.dev",
+      "host": "mcp.steadyscrape.dev",
       "servers": 6,
       "ok": 6,
       "gated": 0,
       "dead": 0,
       "noAnswer": 0,
+      "uniqueToolsets": 4,
+      "medianTokens": 1392
+    },
+    {
+      "host": "llmrt-companion.manhliemcn4euwlu.workers.dev",
+      "servers": 6,
+      "ok": 5,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 1,
       "uniqueToolsets": 1,
       "medianTokens": 435
     },
     {
       "host": "mcp.arxo.io",
       "servers": 6,
-      "ok": 2,
+      "ok": 0,
       "gated": 0,
       "dead": 4,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 7498
+      "noAnswer": 2,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "apim-agentforge-6lfm33.azure-api.net",
@@ -1667,16 +1727,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 6,
       "medianTokens": 679
-    },
-    {
-      "host": "feeds.agentexchange.work",
-      "servers": 6,
-      "ok": 6,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 6,
-      "medianTokens": 165
     },
     {
       "host": "mcp.harny.ai",
@@ -1819,6 +1869,16 @@
       "medianTokens": 4408
     },
     {
+      "host": "api.shortvidapi.com",
+      "servers": 5,
+      "ok": 5,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 2617
+    },
+    {
       "host": "modelmarket.dev",
       "servers": 5,
       "ok": 5,
@@ -1827,6 +1887,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 5,
       "medianTokens": 586
+    },
+    {
+      "host": "sec-biotech-priorart-gateway.b2bintel-edge.workers.dev",
+      "servers": 5,
+      "ok": 5,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 682
     },
     {
       "host": "www.argohub.es",
@@ -2006,7 +2076,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 4,
-      "medianTokens": 5117
+      "medianTokens": 5238
     },
     {
       "host": "digitalgemology.com",
@@ -2067,6 +2137,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 0,
       "medianTokens": 0
+    },
+    {
+      "host": "manhourplan.com",
+      "servers": 4,
+      "ok": 4,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 4,
+      "medianTokens": 585
     },
     {
       "host": "angel.oroboros-design.com",
@@ -2137,16 +2217,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 2278
-    },
-    {
-      "host": "api.shortvidapi.com",
-      "servers": 4,
-      "ok": 4,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 2617
     },
     {
       "host": "api.videodataapi.com",
@@ -2259,16 +2329,6 @@
       "medianTokens": 5567
     },
     {
-      "host": "compabase.com",
-      "servers": 4,
-      "ok": 4,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 4,
-      "medianTokens": 3775
-    },
-    {
       "host": "monit.ly",
       "servers": 4,
       "ok": 4,
@@ -2277,6 +2337,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 4,
       "medianTokens": 583
+    },
+    {
+      "host": "compabase.com",
+      "servers": 4,
+      "ok": 4,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 4,
+      "medianTokens": 3775
     },
     {
       "host": "www.ia-qa.com",
@@ -2356,7 +2426,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 4,
-      "medianTokens": 208701
+      "medianTokens": 220163
     },
     {
       "host": "rapp-agent-builder.azurewebsites.net",
@@ -2373,8 +2443,8 @@
       "servers": 4,
       "ok": 0,
       "gated": 1,
-      "dead": 0,
-      "noAnswer": 3,
+      "dead": 3,
+      "noAnswer": 0,
       "uniqueToolsets": 0,
       "medianTokens": 0
     },
@@ -2539,6 +2609,16 @@
       "medianTokens": 11238
     },
     {
+      "host": "eukollab.ai",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 552
+    },
+    {
       "host": "mcp.ohmyfin.ai",
       "servers": 3,
       "ok": 3,
@@ -2546,7 +2626,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 1,
-      "medianTokens": 23332
+      "medianTokens": 23521
     },
     {
       "host": "roosteragents.ai",
@@ -2559,16 +2639,6 @@
       "medianTokens": 876
     },
     {
-      "host": "searchshopai-mcp.fly.dev",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 2510
-    },
-    {
       "host": "scoreia.ai",
       "servers": 3,
       "ok": 3,
@@ -2577,6 +2647,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 3,
       "medianTokens": 2115
+    },
+    {
+      "host": "searchshopai-mcp.fly.dev",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 2510
     },
     {
       "host": "mcp.stork.ai",
@@ -2611,12 +2691,12 @@
     {
       "host": "savantcat.cn",
       "servers": 3,
-      "ok": 3,
+      "ok": 2,
       "gated": 0,
       "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 1200
+      "noAnswer": 1,
+      "uniqueToolsets": 2,
+      "medianTokens": 1673
     },
     {
       "host": "byondr.co",
@@ -2657,6 +2737,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 58
+    },
+    {
+      "host": "api.addsynapse.com",
+      "servers": 3,
+      "ok": 0,
+      "gated": 3,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "ampworth.com",
@@ -2706,7 +2796,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 3265
+      "medianTokens": 3307
     },
     {
       "host": "agentnative.dennery.ai",
@@ -2749,6 +2839,16 @@
       "medianTokens": 2197
     },
     {
+      "host": "api.doseedo.com",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 35717
+    },
+    {
       "host": "douxprocess.com",
       "servers": 3,
       "ok": 3,
@@ -2767,16 +2867,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 2,
       "medianTokens": 4225
-    },
-    {
-      "host": "api.doseedo.com",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 34595
     },
     {
       "host": "gitlab.com",
@@ -2859,16 +2949,6 @@
       "medianTokens": 27382
     },
     {
-      "host": "manhourplan.com",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 532
-    },
-    {
       "host": "api.markifact.com",
       "servers": 3,
       "ok": 0,
@@ -2886,7 +2966,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 3,
-      "medianTokens": 3520
+      "medianTokens": 3575
     },
     {
       "host": "api.ogenalabs.com",
@@ -2919,16 +2999,6 @@
       "medianTokens": 1197
     },
     {
-      "host": "powmcp.com",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 1208
-    },
-    {
       "host": "postthisdeal.com",
       "servers": 3,
       "ok": 3,
@@ -2937,6 +3007,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 3,
       "medianTokens": 1641
+    },
+    {
+      "host": "powmcp.com",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 1208
     },
     {
       "host": "api.realtydataapi.com",
@@ -2967,16 +3047,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 3,
       "medianTokens": 922
-    },
-    {
-      "host": "sml-agent-products.onrender.com",
-      "servers": 3,
-      "ok": 0,
-      "gated": 0,
-      "dead": 3,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
     },
     {
       "host": "api.seorecords.com",
@@ -3049,16 +3119,6 @@
       "medianTokens": 746
     },
     {
-      "host": "looper-products.fly.dev",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 159
-    },
-    {
       "host": "api.inbin.dev",
       "servers": 3,
       "ok": 3,
@@ -3069,14 +3129,34 @@
       "medianTokens": 1452
     },
     {
-      "host": "mcp.steadyscrape.dev",
+      "host": "looper-products.fly.dev",
       "servers": 3,
       "ok": 3,
       "gated": 0,
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 3,
-      "medianTokens": 1195
+      "medianTokens": 159
+    },
+    {
+      "host": "email-security-deliverability-grader.b2bintel-edge.workers.dev",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 211
+    },
+    {
+      "host": "smart-deal-calculator.b2bintel-edge.workers.dev",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 451
     },
     {
       "host": "money-reactor.makar52nn2016.workers.dev",
@@ -3319,16 +3399,6 @@
       "medianTokens": 388
     },
     {
-      "host": "apim-ai-apis.azure-api.net",
-      "servers": 3,
-      "ok": 3,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 3,
-      "medianTokens": 1283
-    },
-    {
       "host": "getecoback.com",
       "servers": 3,
       "ok": 3,
@@ -3337,6 +3407,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 488543
+    },
+    {
+      "host": "apim-ai-apis.azure-api.net",
+      "servers": 3,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 1,
+      "uniqueToolsets": 2,
+      "medianTokens": 2233
     },
     {
       "host": "flightdb.org",
@@ -3426,7 +3506,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 1433
+      "medianTokens": 1488
     },
     {
       "host": "mcp.oldweb.tech",
@@ -3526,7 +3606,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 1064
+      "medianTokens": 1106
     },
     {
       "host": "babelii.diofis.net",
@@ -3536,7 +3616,27 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 1934
+      "medianTokens": 2040
+    },
+    {
+      "host": "placeprofile.net",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 2,
+      "medianTokens": 3736
+    },
+    {
+      "host": "since98.vn",
+      "servers": 3,
+      "ok": 3,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 3,
+      "medianTokens": 3970
     },
     {
       "host": "opas.world",
@@ -3609,16 +3709,6 @@
       "medianTokens": 3315
     },
     {
-      "host": "mcp.agentgates.ai",
-      "servers": 2,
-      "ok": 1,
-      "gated": 1,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 1247
-    },
-    {
       "host": "advisorsai.ai",
       "servers": 2,
       "ok": 2,
@@ -3627,6 +3717,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 2,
       "medianTokens": 731
+    },
+    {
+      "host": "mcp.agentgates.ai",
+      "servers": 2,
+      "ok": 1,
+      "gated": 1,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 1247
     },
     {
       "host": "ai-akari.ai",
@@ -3679,16 +3779,6 @@
       "medianTokens": 1558
     },
     {
-      "host": "mcp-server-295985738387.europe-west1.run.app",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 6595
-    },
-    {
       "host": "mcp.bazichart.ai",
       "servers": 2,
       "ok": 0,
@@ -3729,16 +3819,6 @@
       "medianTokens": 233
     },
     {
-      "host": "build.chipp.ai",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
       "host": "mcp.certscore.ai",
       "servers": 2,
       "ok": 1,
@@ -3747,6 +3827,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 1660
+    },
+    {
+      "host": "build.chipp.ai",
+      "servers": 2,
+      "ok": 0,
+      "gated": 2,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "agentmart.ciphyr.ai",
@@ -3807,6 +3897,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 423
+    },
+    {
+      "host": "mcp-server-295985738387.europe-west1.run.app",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 6595
     },
     {
       "host": "app.fortunest.ai",
@@ -3989,16 +4089,6 @@
       "medianTokens": 0
     },
     {
-      "host": "mcp.nwsppr.ai",
-      "servers": 2,
-      "ok": 1,
-      "gated": 1,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 603
-    },
-    {
       "host": "api.newzai.ai",
       "servers": 2,
       "ok": 0,
@@ -4009,6 +4099,16 @@
       "medianTokens": 0
     },
     {
+      "host": "mcp.nwsppr.ai",
+      "servers": 2,
+      "ok": 1,
+      "gated": 1,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 603
+    },
+    {
       "host": "plith.ai",
       "servers": 2,
       "ok": 2,
@@ -4017,6 +4117,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 5822
+    },
+    {
+      "host": "mcp.posteverywhere.ai",
+      "servers": 2,
+      "ok": 0,
+      "gated": 2,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "reviewpaper.ai",
@@ -4149,6 +4259,16 @@
       "medianTokens": 753
     },
     {
+      "host": "wakeagents.ai",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 2,
+      "medianTokens": 433
+    },
+    {
       "host": "whichagent.ai",
       "servers": 2,
       "ok": 2,
@@ -4199,16 +4319,6 @@
       "medianTokens": 12634
     },
     {
-      "host": "wakeagents.ai",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 316
-    },
-    {
       "host": "api.ccreward.app",
       "servers": 2,
       "ok": 0,
@@ -4256,7 +4366,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 3369
+      "medianTokens": 3398
     },
     {
       "host": "api.lovedone.app",
@@ -4266,7 +4376,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 2,
-      "medianTokens": 1406
+      "medianTokens": 1407
     },
     {
       "host": "gleaming-cassata-d41682.netlify.app",
@@ -4333,8 +4443,8 @@
       "servers": 2,
       "ok": 1,
       "gated": 0,
-      "dead": 0,
-      "noAnswer": 1,
+      "dead": 1,
+      "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 494
     },
@@ -4396,7 +4506,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 1,
-      "medianTokens": 11588
+      "medianTokens": 11589
     },
     {
       "host": "whichpost.app",
@@ -4446,7 +4556,7 @@
       "dead": 0,
       "noAnswer": 0,
       "uniqueToolsets": 1,
-      "medianTokens": 39583
+      "medianTokens": 39758
     },
     {
       "host": "mcp.criticalpathpartners.ca",
@@ -4529,16 +4639,6 @@
       "medianTokens": 0
     },
     {
-      "host": "rofilter.cn",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
       "host": "site.pianam.cn",
       "servers": 2,
       "ok": 2,
@@ -4547,6 +4647,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 1941
+    },
+    {
+      "host": "rofilter.cn",
+      "servers": 2,
+      "ok": 0,
+      "gated": 2,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "suanlinfang.cn",
@@ -4559,16 +4669,6 @@
       "medianTokens": 1869
     },
     {
-      "host": "elyreon-payload-validator.colt2822.workers.dev",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
       "host": "website-api.codeways.co",
       "servers": 2,
       "ok": 2,
@@ -4577,6 +4677,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 1,
       "medianTokens": 1064
+    },
+    {
+      "host": "elyreon-payload-validator.colt2822.workers.dev",
+      "servers": 2,
+      "ok": 0,
+      "gated": 2,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "crossandcovenant.co",
@@ -4596,7 +4706,7 @@
       "dead": 1,
       "noAnswer": 0,
       "uniqueToolsets": 1,
-      "medianTokens": 50930
+      "medianTokens": 51033
     },
     {
       "host": "mcp.hostelmate.co",
@@ -4669,6 +4779,16 @@
       "medianTokens": 1639
     },
     {
+      "host": "www.marian.coach",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 2,
+      "medianTokens": 3566
+    },
+    {
       "host": "api.402rates.com",
       "servers": 2,
       "ok": 2,
@@ -4719,16 +4839,6 @@
       "medianTokens": 0
     },
     {
-      "host": "www.marian.coach",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 3566
-    },
-    {
       "host": "agentfonts.com",
       "servers": 2,
       "ok": 2,
@@ -4741,12 +4851,12 @@
     {
       "host": "api.agentry.com",
       "servers": 2,
-      "ok": 1,
+      "ok": 0,
       "gated": 0,
       "dead": 1,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 5644
+      "noAnswer": 1,
+      "uniqueToolsets": 0,
+      "medianTokens": 0
     },
     {
       "host": "www.aguasto.com",
@@ -4801,12 +4911,12 @@
     {
       "host": "alternativeassetliteracy.com",
       "servers": 2,
-      "ok": 1,
-      "gated": 1,
+      "ok": 2,
+      "gated": 0,
       "dead": 0,
       "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 2534
+      "uniqueToolsets": 2,
+      "medianTokens": 4305
     },
     {
       "host": "channel.amkentech.com",
@@ -4829,6 +4939,26 @@
       "medianTokens": 665
     },
     {
+      "host": "agentready-tools.com",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 2295
+    },
+    {
+      "host": "aiapi-pro.com",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 423
+    },
+    {
       "host": "www.anthonyhunts.com",
       "servers": 2,
       "ok": 2,
@@ -4837,6 +4967,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 2,
       "medianTokens": 419
+    },
+    {
+      "host": "shop.alshhbaa.com",
+      "servers": 2,
+      "ok": 2,
+      "gated": 0,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 491
     },
     {
       "host": "anywaypossible.com",
@@ -4899,16 +5039,6 @@
       "medianTokens": 2219
     },
     {
-      "host": "app.back9ins.com",
-      "servers": 2,
-      "ok": 1,
-      "gated": 1,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 27007
-    },
-    {
       "host": "mcp.aribot.ayurak.com",
       "servers": 2,
       "ok": 0,
@@ -4917,6 +5047,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 0,
       "medianTokens": 0
+    },
+    {
+      "host": "app.back9ins.com",
+      "servers": 2,
+      "ok": 1,
+      "gated": 1,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 27007
     },
     {
       "host": "beleeg.com",
@@ -4957,6 +5097,16 @@
       "noAnswer": 0,
       "uniqueToolsets": 0,
       "medianTokens": 0
+    },
+    {
+      "host": "api.blootrue.com",
+      "servers": 2,
+      "ok": 1,
+      "gated": 1,
+      "dead": 0,
+      "noAnswer": 0,
+      "uniqueToolsets": 1,
+      "medianTokens": 208
     },
     {
       "host": "app.brightsec.com",
@@ -5007,156 +5157,6 @@
       "noAnswer": 0,
       "uniqueToolsets": 2,
       "medianTokens": 1517
-    },
-    {
-      "host": "californiacarquotes.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 1866
-    },
-    {
-      "host": "traffic.californialicensingeducation.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 1344
-    },
-    {
-      "host": "mcp.chatfuel.com",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
-      "host": "asset-management.mcp.cloudinary.com",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
-      "host": "clypmint.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 17477
-    },
-    {
-      "host": "corroborateme.com",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
-      "host": "cocoeatsai.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 562
-    },
-    {
-      "host": "api.codercops.com",
-      "servers": 2,
-      "ok": 1,
-      "gated": 1,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 744
-    },
-    {
-      "host": "compatsy.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 867
-    },
-    {
-      "host": "api.connectknot.com",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
-      "host": "mcp.cpln.io",
-      "servers": 2,
-      "ok": 0,
-      "gated": 2,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 0,
-      "medianTokens": 0
-    },
-    {
-      "host": "mcp.couryo.com",
-      "servers": 2,
-      "ok": 1,
-      "gated": 1,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 1102
-    },
-    {
-      "host": "creatorsxbrands.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 1739
-    },
-    {
-      "host": "mcp.currency-core.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 1,
-      "medianTokens": 4785
-    },
-    {
-      "host": "mcp.cuberithm.com",
-      "servers": 2,
-      "ok": 2,
-      "gated": 0,
-      "dead": 0,
-      "noAnswer": 0,
-      "uniqueToolsets": 2,
-      "medianTokens": 1607
     }
   ],
   "shownTokens": {
@@ -5164,1204 +5164,1237 @@
     "max": 2054606
   },
   "changes": {
-    "since": "2026-11-19T12:54:29.677Z",
+    "since": "2026-11-20T12:49:03.280Z",
     "added": [
       {
-        "name": "io.github.f-tiger/tds-home-tools",
+        "name": "io.github.ocean1547-ui/nspros-mcp-gateway",
         "status": "ok",
-        "tokens": 368457
+        "tokens": 1056865
       },
       {
-        "name": "software.brainiac/agriculture-intelligence",
+        "name": "io.github.theromis/froxel",
         "status": "ok",
-        "tokens": 67842
+        "tokens": 98494
       },
       {
-        "name": "software.brainiac/maritime-intelligence",
+        "name": "io.github.PascalSun/agenticgeomate",
         "status": "ok",
-        "tokens": 54409
+        "tokens": 26610
       },
       {
-        "name": "software.brainiac/environmental-intelligence",
+        "name": "io.github.hessbey/parfumo-mcp",
         "status": "ok",
-        "tokens": 54091
+        "tokens": 24881
       },
       {
-        "name": "software.brainiac/network-intelligence",
+        "name": "io.github.shannonbay/quarterdeck",
         "status": "ok",
-        "tokens": 53584
+        "tokens": 22205
       },
       {
-        "name": "software.brainiac/solar-battery",
+        "name": "ai.axad/axad",
         "status": "ok",
-        "tokens": 52196
+        "tokens": 19839
       },
       {
-        "name": "software.brainiac/aviation-intelligence",
+        "name": "com.caelaralabs/mcp",
         "status": "ok",
-        "tokens": 51702
+        "tokens": 18625
       },
       {
-        "name": "software.brainiac/electrical-engineering",
+        "name": "net.blazarforce/blazar-polygon",
         "status": "ok",
-        "tokens": 50893
+        "tokens": 18419
       },
       {
-        "name": "software.brainiac/insurance-intelligence",
+        "name": "io.github.pkolawa/parliament-poland-mcp-server",
         "status": "ok",
-        "tokens": 49658
+        "tokens": 16374
       },
       {
-        "name": "software.brainiac/corporate-intelligence",
+        "name": "com.dipperfield/dipperfield",
         "status": "ok",
-        "tokens": 49459
+        "tokens": 16346
       },
       {
-        "name": "software.brainiac/fraud-signals",
+        "name": "fun.ubi/mcp",
         "status": "ok",
-        "tokens": 49370
+        "tokens": 14555
       },
       {
-        "name": "software.brainiac/email-security",
+        "name": "com.datingpond/pond",
         "status": "ok",
-        "tokens": 47260
+        "tokens": 12548
       },
       {
-        "name": "software.brainiac/space-intelligence",
+        "name": "io.github.open-daemon/opendaemon-comfyui-mcp",
         "status": "ok",
-        "tokens": 45843
+        "tokens": 11433
       },
       {
-        "name": "software.brainiac/robotics-intelligence",
+        "name": "io.github.CloudCorpRecords/sitedossier",
         "status": "ok",
-        "tokens": 45183
+        "tokens": 11401
       },
       {
-        "name": "software.brainiac/electricity-market",
+        "name": "dev.homemade/homemade",
         "status": "ok",
-        "tokens": 44564
+        "tokens": 10868
       },
       {
-        "name": "software.brainiac/technical-analysis",
+        "name": "com.autotunempc/autotunempc",
         "status": "ok",
-        "tokens": 44344
+        "tokens": 9572
       },
       {
-        "name": "software.brainiac/trade-finance",
+        "name": "ai.windpaint/windpaint",
         "status": "ok",
-        "tokens": 42808
+        "tokens": 9253
       },
       {
-        "name": "software.brainiac/macro-intelligence",
+        "name": "io.github.HamedShams/whenship",
         "status": "ok",
-        "tokens": 42672
+        "tokens": 9245
       },
       {
-        "name": "software.brainiac/public-records",
+        "name": "com.birjob/jobs",
         "status": "ok",
-        "tokens": 38312
+        "tokens": 9224
       },
       {
-        "name": "software.brainiac/threat-intelligence",
+        "name": "vn.since98/vietnam-payroll",
         "status": "ok",
-        "tokens": 37338
+        "tokens": 8238
       },
       {
-        "name": "software.brainiac/freight-customs",
+        "name": "ru.stadika/stadika",
         "status": "ok",
-        "tokens": 33899
+        "tokens": 8206
       },
       {
-        "name": "io.github.brdz4/robot-mcp",
+        "name": "com.qravate/qr-codes",
         "status": "ok",
-        "tokens": 31931
+        "tokens": 7980
       },
       {
-        "name": "software.brainiac/identity-security",
+        "name": "pl.podziemieanalityczne/dane",
         "status": "ok",
-        "tokens": 31653
+        "tokens": 7513
       },
       {
-        "name": "software.brainiac/agent-networks",
+        "name": "ai.cartai/cartai-mcp-server",
         "status": "ok",
-        "tokens": 29091
+        "tokens": 7339
       },
       {
-        "name": "software.brainiac/building-energy",
+        "name": "vn.since98/zalo-business-reference",
         "status": "ok",
-        "tokens": 28648
+        "tokens": 6822
       },
       {
-        "name": "software.brainiac/security-signals",
+        "name": "com.noderings/mcp",
         "status": "ok",
-        "tokens": 28097
+        "tokens": 6679
       },
       {
-        "name": "software.brainiac/construction-site-operations",
+        "name": "so.tallyho/tallyho",
         "status": "ok",
-        "tokens": 26361
+        "tokens": 6615
       },
       {
-        "name": "software.brainiac/accounts-payable",
+        "name": "com.notacompany/newsletter",
         "status": "ok",
-        "tokens": 24818
+        "tokens": 6580
       },
       {
-        "name": "io.checkview/mcp-server",
+        "name": "com.cycle-platform/cycle-verify",
         "status": "ok",
-        "tokens": 24546
+        "tokens": 6163
       },
       {
-        "name": "software.brainiac/restaurant-operations",
+        "name": "com.moqway/wholesale",
         "status": "ok",
-        "tokens": 23334
+        "tokens": 6142
       },
       {
-        "name": "software.brainiac/conversion-intelligence",
+        "name": "io.github.OsakaSaul/foxapis-data",
         "status": "ok",
-        "tokens": 22932
+        "tokens": 6114
       },
       {
-        "name": "it.one2trip/one2trip",
+        "name": "net.placeprofile/evidence",
         "status": "ok",
-        "tokens": 22853
+        "tokens": 6050
       },
       {
-        "name": "software.brainiac/returns-delivery",
+        "name": "net.placeprofile/venue-atmosphere-verification-bitcoin",
         "status": "ok",
-        "tokens": 22394
+        "tokens": 6050
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-plan-mcp",
+        "name": "dev.workers.agent-arena-base.bolt-x402/due-diligence",
         "status": "ok",
-        "tokens": 22223
+        "tokens": 6006
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-compare-mcp",
+        "name": "com.pumpkincms/pumpkin-public-site",
         "status": "ok",
-        "tokens": 22212
+        "tokens": 5360
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-cost-mcp",
+        "name": "com.manoonlabs/doxtract",
         "status": "ok",
-        "tokens": 22212
+        "tokens": 5286
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-sim-mcp",
+        "name": "com.growthbusinessfinance/mcp",
         "status": "ok",
-        "tokens": 22212
+        "tokens": 5139
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-match-mcp",
+        "name": "dev.workers.agent-arena-base.mira-vistas/vistas-studio",
         "status": "ok",
-        "tokens": 22193
+        "tokens": 4968
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-track-mcp",
+        "name": "io.github.MotionMenu/motion-menu",
         "status": "ok",
-        "tokens": 22191
+        "tokens": 4921
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-check-mcp",
+        "name": "io.github.borsty2103/viventii-mcp",
         "status": "ok",
-        "tokens": 22187
+        "tokens": 4914
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-toilet-flapper-swap-index-mcp",
+        "name": "io.github.CLNS-KR/frnc",
         "status": "ok",
-        "tokens": 22187
+        "tokens": 4892
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-plan-mcp",
+        "name": "com.palletdimensions/freight-reference",
         "status": "ok",
-        "tokens": 22186
+        "tokens": 4856
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-plan-mcp",
+        "name": "com.blacksuvmiami/miami-black-suv",
         "status": "ok",
-        "tokens": 22186
+        "tokens": 4846
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-compare-mcp",
+        "name": "net.placeprofile/placeprofile",
         "status": "ok",
-        "tokens": 22175
+        "tokens": 4695
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-cost-mcp",
+        "name": "io.github.dieron/mygraph",
         "status": "ok",
-        "tokens": 22175
+        "tokens": 4660
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-compare-mcp",
+        "name": "io.tiktokapi/tiktok-scraper-video-downloader-api-mcp",
         "status": "ok",
-        "tokens": 22175
+        "tokens": 4658
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-cost-mcp",
+        "name": "ai.opencurrent/opencurrent",
         "status": "ok",
-        "tokens": 22175
+        "tokens": 4626
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-sim-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/defai-intent-solver-yield-optimizer-mcp",
         "status": "ok",
-        "tokens": 22175
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-match-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/elizaos-agentkit-defi-polymarket-router-mcp",
         "status": "ok",
-        "tokens": 22156
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-match-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/evm-dex-swap-hyperliquid-sniper-mcp",
         "status": "ok",
-        "tokens": 22156
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-track-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/flashbots-mev-polymarket-clob-kelly-criterion-mcp",
         "status": "ok",
-        "tokens": 22154
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-index-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/impermanent-loss-liquidation-funding-rate-mcp",
         "status": "ok",
-        "tokens": 22150
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-check-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/yield-bearing-rwa-treasury-cross-chain-bridge-mcp",
         "status": "ok",
-        "tokens": 22150
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-shutoff-valve-map-index-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/hyperliquid-polymarket-builder-code-perp-mcp",
         "status": "ok",
-        "tokens": 22150
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-faucet-swap-guide-check-mcp",
+        "name": "dev.workers.b2bintel-edge.defi-route-intel/mcp-apps-interactive-defi-checkout-ui-mcp",
         "status": "ok",
-        "tokens": 22150
+        "tokens": 4479
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-drain-clear-steps-plan-mcp",
+        "name": "com.provkeep/rules",
         "status": "ok",
-        "tokens": 22149
+        "tokens": 4341
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-drain-clear-steps-compare-mcp",
+        "name": "com.datamembership/uk-consumer-data",
         "status": "ok",
-        "tokens": 22138
+        "tokens": 4302
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-drain-clear-steps-cost-mcp",
+        "name": "com.bilo2026/hub",
         "status": "ok",
-        "tokens": 22138
+        "tokens": 4279
       },
       {
-        "name": "io.github.mrfentmen/plumbing-diy-drain-clear-steps-sim-mcp",
+        "name": "dev.workers.agent-arena-base.thread-kit/thread-kit",
         "status": "ok",
-        "tokens": 22138
+        "tokens": 4135
       },
       {
-        "name": "io.github.mrfentmen/electrical-diy-led-retrofit-plan-plan-mcp",
+        "name": "com.mapleminute/mapleminute",
         "status": "ok",
-        "tokens": 22136
+        "tokens": 4091
       }
     ],
     "removed": [
-      "com.ascent-partners/opencode-workbench",
-      "com.netnestdesign/fundamentals",
-      "com.newscatcherapi/catchall",
-      "dev.flatmark/markdown-converter",
-      "dev.pdfrender/pdfrender",
-      "dev.workers.w0arvg81zlgf.x402-exp/agent-utilities",
-      "dev.workers.w0arvg81zlgf.x402-precheck/precheck",
-      "io.github.mithgalalfayez/nullclear",
-      "ai.cybernative/image-upscaler-8mp",
-      "io.github.xjpru/xentropy-notes"
+      "com.eurodatum/eurodatum",
+      "com.lattice-sys.plumbline/mcp",
+      "com.nearbypermits/permits",
+      "com.pumpup/pumpup",
+      "com.scriptmasterlabs/agent-safety",
+      "com.scriptmasterlabs/bid-cast",
+      "com.scriptmasterlabs/cascade-graph",
+      "com.scriptmasterlabs/quant-terminal",
+      "com.scriptmasterlabs/robinhood-rwa",
+      "com.scriptmasterlabs/ticker-research",
+      "io.github.otsirh/book-cover-generator",
+      "io.github.russellzhengrocks-arch/suba",
+      "io.github.cortex-bus/cortex-bus"
     ],
     "wentDown": [
       {
-        "name": "ai.churchlatin/translator",
-        "from": "protocol_error",
-        "to": "protocol_error"
-      },
-      {
-        "name": "ai.clawterminal/markets",
+        "name": "ai.coingraph/coingraph",
         "from": "not_found",
         "to": "not_found"
       },
       {
-        "name": "ai.fantopy/fantopy",
-        "from": "refused",
-        "to": "refused"
-      },
-      {
-        "name": "ai.hyperscale0/hyperscale-tenant-tools",
-        "from": "dns",
-        "to": "dns"
-      },
-      {
-        "name": "br.com.music360.app/mcp-server",
-        "from": "protocol_error",
-        "to": "protocol_error"
-      },
-      {
-        "name": "co.okahu.mcp-registry/okahu",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "com.atlasipholdingsllc.app/atlas-data-exchange",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "com.backlnk/backlnk",
-        "from": "refused",
-        "to": "refused"
-      },
-      {
-        "name": "com.botsket/search",
+        "name": "ai.proreach/outreach",
         "from": "tls",
         "to": "tls"
       },
       {
-        "name": "com.botwatercooler/botwatercooler",
-        "from": "not_found",
-        "to": "not_found"
-      },
-      {
-        "name": "com.hirosecure/agents",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "com.hirosecure/architect",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "com.joinsnail/snail",
-        "from": "not_found",
-        "to": "tls"
-      },
-      {
-        "name": "com.livefingerlakes/flx-one",
-        "from": "not_found",
-        "to": "not_found"
-      },
-      {
-        "name": "com.rentandrugshield/mcp-server",
-        "from": "not_found",
-        "to": "not_found"
-      },
-      {
-        "name": "com.shaq-log/freight-mcp",
-        "from": "protocol_error",
+        "name": "app.octotrip/flights",
+        "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "com.soviqai/soviq",
-        "from": "not_found",
-        "to": "not_found"
-      },
-      {
-        "name": "com.typebid/typebid",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "dev.korzen/bot-protection",
-        "from": "error",
-        "to": "error"
-      },
-      {
-        "name": "dev.workers.microtools-x402.x402-dns-auth-checker/dns-auth-checker",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "dev.workers.microtools-x402.x402-sec-edgar/sec-edgar",
-        "from": "server_error",
-        "to": "server_error"
-      },
-      {
-        "name": "eu.getdocflow/docflow",
+        "name": "com.addressriskreport/addressriskreport-discovery",
         "from": "protocol_error",
         "to": "protocol_error"
       },
       {
-        "name": "io.github.Evozim/5g-core-nfv-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/aegis-policy-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/agentic-payroll-processor-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/agile-sprint-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/ai-fleet-cards-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/ai-humanizer-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/ai-watermark-provenance-verifier-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/albedo-delighter-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/aliexpress-dropship-finder-mcp",
+        "name": "com.alrebro/alrebro",
         "from": "protocol_error",
-        "to": "timeout"
+        "to": "protocol_error"
       },
       {
-        "name": "io.github.Tsonnn/pt-chart-mcp",
+        "name": "com.arenacalc/endurance-pace-lab",
         "from": "not_found",
         "to": "not_found"
       },
       {
-        "name": "io.github.Evozim/apple-vision-pro-optimizer-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/architecture-dna-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.abhinand-adviciya/loom",
+        "name": "com.boxofficefees/mcp",
         "from": "not_found",
         "to": "not_found"
       },
       {
-        "name": "io.github.Evozim/ashrae-compliance-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.ajwentcrazy/lazareus",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/atomic-swap-coordinator-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/auth-sentinel-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/automated-dpia-reporter-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/aws-builder-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.chalktalkhq/chalktalk",
+        "name": "com.dispatchmath/mcp",
         "from": "not_found",
         "to": "not_found"
       },
       {
-        "name": "io.github.Evozim/bacnet-ip-discovery-mcp",
+        "name": "com.dnsmint/mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.esportcalc/fps-sensitivity-lab",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.getadasitecheck/ada-site-check-discovery",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "com.getshieldcheck/agentcheck-discovery",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "com.guestdropalbum/guestdrop-mcp",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "com.kevinbravo.cinve/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.landlordbench/mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.little-works/discover",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.luriart/luria",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.manoonlabs/doc2json",
+        "from": "tls",
+        "to": "not_found"
+      },
+      {
+        "name": "com.omnitoolcalc/llm-finops-suite",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.remixmeme/remixmeme",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.raltan/raltan",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.Evozim/barcode-qr-decoder-mcp",
+        "name": "com.run402.agentpay-gate/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.apishield-waf/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.careerforge-ai/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.deepcheck-kyb/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.lexishield-ai/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.invoiceguard-ai/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.nexussdr-ai/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.run402.rugshield-ai/mcp",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "com.sketchlib/sketchlib",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "com.soc2compared/mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.super-log/super-log-cloud",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.davisvillelabs/ai-agent-analytics",
+        "name": "com.tickmarkbooks/mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "com.twitterxapi/mcp",
+        "from": "dns",
+        "to": "protocol_error"
+      },
+      {
+        "name": "com.virohanalife/mnemos",
         "from": "dns",
         "to": "dns"
       },
       {
-        "name": "io.github.Evozim/base-to-polygon-relayer-mcp",
-        "from": "timeout",
-        "to": "timeout"
+        "name": "com.virohanalife/virohana-business",
+        "from": "server_error",
+        "to": "server_error"
       },
       {
-        "name": "io.github.Evozim/batch-request-bundler-mcp",
-        "from": "protocol_error",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/battery-swap-station-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/bft-swarm-vote-aggregator-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/blinded-macaroon-signer-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/cell-balancing-algorithm-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/chain-agnostic-escrow-reader-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.itpofy2024o/fable-maker",
+        "name": "de.drgsystem/medical-catalogs",
         "from": "not_found",
         "to": "not_found"
       },
       {
-        "name": "io.github.Evozim/chiller-cop-efficiency-mcp",
+        "name": "dev.bluet/bluet",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "dev.pages.mnemolog/mnemolog",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "exchange.temporal/temporal",
+        "from": "error",
+        "to": "error"
+      },
+      {
+        "name": "io.github.0bkevin/cinve",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "io.github.45b6sm69tr-ops/jp-article-check-paid",
+        "from": "server_error",
+        "to": "server_error"
+      },
+      {
+        "name": "io.github.AIAll-TARS/naim",
+        "from": "tls",
+        "to": "tls"
+      },
+      {
+        "name": "io.github.AENDYSTUDIO/ndp",
+        "from": "refused",
+        "to": "refused"
+      },
+      {
+        "name": "io.github.Anmol1310/youtube-reader",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.Adirdavi/docmcp",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.Evozim/collusion-detection-sentinel-mcp",
+        "name": "io.github.Brock-Denton/tokenmaxxing",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.ChanghuLiu/england-works-watch",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.ChanghuLiu/uk-premises-licence-mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.ChanghuLiu/uk-taxi-phv-regulatory-decision-layer",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.ChanghuLiu/uk-waste-rule-mcp",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.EziServices/mcp-public",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.Evozim/3d-meshweaver-mcp",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.Evozim/contractoracle-mcp",
+        "name": "io.github.GhazwanAlemara/cre-dominion",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "io.github.GhazwanAlemara/cyber-agents",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "io.github.GhazwanAlemara/gn0e",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.GhazwanAlemara/supernova",
+        "from": "protocol_error",
+        "to": "protocol_error"
+      },
+      {
+        "name": "io.github.Evozim/90-percent-liquidity-advance-mcp",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.Evozim/credit-risk-mcp",
+        "name": "io.github.Evozim/active-seat-metering-mcp",
         "from": "timeout",
         "to": "timeout"
       },
       {
-        "name": "io.github.langhoormarchal-beep/calmactiva-catalog",
-        "from": "dns",
-        "to": "dns"
-      },
-      {
-        "name": "io.github.Evozim/cross-company-agent-dispute-court-mcp",
-        "from": "timeout",
-        "to": "timeout"
-      },
-      {
-        "name": "io.github.Evozim/cross-docking-coordinator-mcp",
+        "name": "io.github.Evozim/ad-sniper-mcp",
         "from": "timeout",
         "to": "timeout"
       }
     ],
     "cameBack": [
       {
-        "name": "ai.painspotter/painspotter",
-        "from": "error",
-        "to": "ok"
-      },
-      {
-        "name": "co.colossalcapital/obvect",
-        "from": "dns",
-        "to": "ok"
-      },
-      {
-        "name": "com.agentwatchr/evidence-index",
-        "from": "server_error",
-        "to": "ok"
-      },
-      {
-        "name": "com.frontofgoal/odds-api",
+        "name": "com.ascent-partners/startup-valuation",
         "from": "not_found",
         "to": "ok"
       },
       {
-        "name": "com.liz6/docs",
-        "from": "timeout",
-        "to": "ok"
-      },
-      {
-        "name": "io.github.SourceParts/parts-mcp",
-        "from": "timeout",
-        "to": "auth"
-      },
-      {
-        "name": "io.github.hal9ai/run-python",
-        "from": "timeout",
-        "to": "ok"
-      },
-      {
-        "name": "io.github.hal9ai/send-email",
-        "from": "timeout",
-        "to": "ok"
-      },
-      {
-        "name": "io.github.voronkovm/canvs",
-        "from": "not_found",
-        "to": "ok"
-      },
-      {
-        "name": "io.metalmantra/registry",
-        "from": "server_error",
-        "to": "ok"
-      },
-      {
-        "name": "me.proxyhub/mcp",
-        "from": "timeout",
-        "to": "ok"
-      },
-      {
-        "name": "me.vpnhub/mcp",
-        "from": "timeout",
-        "to": "ok"
-      },
-      {
-        "name": "study.vela/corpus",
-        "from": "server_error",
-        "to": "ok"
-      },
-      {
-        "name": "uk.co.seocontentmarketing/site",
+        "name": "com.bullionpricecheck/bullion-price-check",
         "from": "protocol_error",
         "to": "ok"
       },
       {
-        "name": "xyz.trusteed/mcp-gateway",
+        "name": "com.rigorpeptides/peptidelab",
         "from": "not_found",
         "to": "ok"
       },
       {
-        "name": "za.co.simcloud/simcloud",
+        "name": "com.scrapingdaddy/scraping-daddy",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "com.scriptmasterlabs/token-verdict",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "com.shaq-log/freight-mcp",
         "from": "timeout",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.Everyways/upsalt-booking",
+        "from": "tls",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.Fractera/deploy",
+        "from": "dns",
         "to": "auth"
+      },
+      {
+        "name": "io.github.GlobKurier-pl/mcp-server",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/calendar-bridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/reminders-bridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/agentsearch-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/notesbridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/second-brain-bridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/realtystack-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/messages-bridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/storebridge-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/shortcuts-bridge",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.IsaiahDupree/devstack-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/jobstack-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/commercebridge",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.IsaiahDupree/socialbridge-mcp",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.alipishbin77/aether",
+        "from": "dns",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.manhliemcn4euwlu-source/llm-red-team-scanner",
+        "from": "server_error",
+        "to": "ok"
+      },
+      {
+        "name": "io.github.rajamohan1950/cls-memory",
+        "from": "server_error",
+        "to": "auth"
+      },
+      {
+        "name": "io.github.zikriz/wallet-doctor-x402",
+        "from": "protocol_error",
+        "to": "ok"
       }
     ],
     "packagesDown": [
       {
-        "name": "io.github.cyanheads/sports-mcp-server",
+        "name": "io.github.GridlineGPU/mcp",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "io.github.fingentic/revolut-mcp",
+        "name": "io.github.demiliani/d365bc-admin-mcp",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "com.akshitanchan/applesauce",
-        "from": "install_failed",
-        "to": "install_failed"
-      },
-      {
-        "name": "io.github.cyanheads/anime-mcp-server",
+        "name": "io.github.cybersora9/pycodemath",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "io.github.cyanheads/finnhub-mcp-server",
+        "name": "io.github.SmarthomeNinja/myio-mcp",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "io.github.ggoldani/agent-passport",
+        "name": "io.github.EphraimElgrabli/gesher-notes",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "io.github.santex85/ats-jobs-mcp",
+        "name": "io.github.EphraimElgrabli/gesher-reminders",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "fm.fyug/fyug",
+        "name": "io.github.Hei33enberg/marocain-mcp-server",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.klappay/klap-mcp",
         "from": "crashed",
         "to": "crashed"
       },
       {
-        "name": "io.github.cyanheads/shift-mcp-server",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.easynodexyz/mcp-x402",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.defnotmid/onimite",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.oguz-kagan-gocmez-edu/apple-calendar-mcp",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.matteoredaelli/atm-milano-mcp",
-        "from": "install_failed",
-        "to": "install_failed"
-      },
-      {
-        "name": "io.github.oguzhanpisgin/mssql-readonly-mcp",
+        "name": "io.github.veriko-mx-labs/veriko",
         "from": "error",
         "to": "error"
       },
       {
-        "name": "io.github.stoolap/mcp",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.rocke2020/oam",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.Agulhas-Labs/swift-sure",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "io.github.Aboudjem/ui-ux-suite",
-        "from": "crashed",
-        "to": "crashed"
-      },
-      {
-        "name": "com.yatofix/rustine",
+        "name": "app.m1k3/m1k3",
         "from": "error",
         "to": "error"
       },
       {
-        "name": "io.github.btsouth/toolport",
-        "from": "timeout",
-        "to": "timeout"
+        "name": "io.github.bp46/hiresquire",
+        "from": "crashed",
+        "to": "crashed"
+      },
+      {
+        "name": "io.github.africaappstudio-max/understand-this-video",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.navid72m/mcp-behave",
+        "from": "crashed",
+        "to": "crashed"
+      },
+      {
+        "name": "io.github.williamdoring-prog/ai-host-optimizer",
+        "from": "crashed",
+        "to": "crashed"
+      },
+      {
+        "name": "io.github.David-Marina/marina-rules",
+        "from": "crashed",
+        "to": "crashed"
+      },
+      {
+        "name": "io.github.IndirectTek/mcp-server",
+        "from": "not_found",
+        "to": "not_found"
+      },
+      {
+        "name": "io.github.santex85/us-recalls-mcp",
+        "from": "crashed",
+        "to": "crashed"
+      },
+      {
+        "name": "io.github.mavaali/daftari",
+        "from": "crashed",
+        "to": "crashed"
       }
     ],
     "packagesBack": [
       {
-        "name": "io.github.a32116150-ctrl/verify402-mcp",
+        "name": "io.github.ufhouck/aicost-cli",
         "from": "crashed",
         "to": "ok"
       },
       {
-        "name": "io.github.elfensky/macos-apps-mcp",
-        "from": "install_failed",
+        "name": "dev.wirecat/whatsapp-cli",
+        "from": "crashed",
+        "to": "needs_args"
+      },
+      {
+        "name": "io.github.bilal07karadeniz/grafyx",
+        "from": "crashed",
         "to": "ok"
-      },
-      {
-        "name": "dev.wirecat/mail-cli",
-        "from": "crashed",
-        "to": "needs_args"
-      },
-      {
-        "name": "dev.wirecat/tg-cli",
-        "from": "crashed",
-        "to": "needs_args"
-      },
-      {
-        "name": "dev.wirecat/asterisk-cli",
-        "from": "crashed",
-        "to": "needs_args"
       }
     ],
     "tokenChanges": [
       {
-        "name": "io.github.f-tiger/getecoback-climate-weather",
-        "before": 3093,
-        "after": 973194,
+        "name": "io.github.f-tiger/ecoback-local-tools",
+        "before": 2722,
+        "after": 973146,
         "exact": true
       },
       {
-        "name": "io.github.f-tiger/getecoback-raumklima",
-        "before": 3093,
-        "after": 973194,
+        "name": "io.github.yuli3/oiyo-calculations",
+        "before": 65995,
+        "after": 127532,
         "exact": true
       },
       {
-        "name": "io.github.f-tiger/hvac-btu-heat-klimaanlage",
-        "before": 3093,
-        "after": 973194,
+        "name": "io.github.aartiq/nowaikit",
+        "before": 71724,
+        "after": 121517,
         "exact": true
       },
       {
-        "name": "io.github.f-tiger/bpj-ai-tools",
-        "before": 392,
-        "after": 201778,
+        "name": "io.github.turbyho/kicad-workbench",
+        "before": 19222,
+        "after": 46310,
         "exact": true
       },
       {
-        "name": "io.github.tresor4k/macalc-mcp",
-        "before": 131320,
-        "after": 5772,
+        "name": "fr.miramo/mcp",
+        "before": 6969,
+        "after": 27021,
         "exact": true
       },
       {
-        "name": "social.flayr/flayr",
-        "before": 88561,
-        "after": 9310,
+        "name": "com.360dialog/mcp",
+        "before": 32987,
+        "after": 13703,
         "exact": false
-      },
-      {
-        "name": "com.radarbg/radar-tools",
-        "before": 81847,
-        "after": 157934,
-        "exact": true
-      },
-      {
-        "name": "io.sslip.2-29-135-242/radar-agent-tools",
-        "before": 81847,
-        "after": 157934,
-        "exact": true
-      },
-      {
-        "name": "io.github.OpenPowerShift/raptor-studio",
-        "before": 41585,
-        "after": 77073,
-        "exact": true
-      },
-      {
-        "name": "ai.marketcode/marketcode",
-        "before": 63207,
-        "after": 96538,
-        "exact": true
-      },
-      {
-        "name": "io.github.richardsolomou/praetorium",
-        "before": 82086,
-        "after": 114172,
-        "exact": true
-      },
-      {
-        "name": "io.github.subimpact/data-mcp",
-        "before": 37881,
-        "after": 59304,
-        "exact": true
-      },
-      {
-        "name": "fi.arche/arche",
-        "before": 27021,
-        "after": 45641,
-        "exact": true
       },
       {
         "name": "org.polyform/polyform",
-        "before": 27164,
-        "after": 42184,
+        "before": 42184,
+        "after": 58858,
         "exact": false
       },
       {
-        "name": "io.github.exquad/thecablecode",
-        "before": 32687,
-        "after": 18622,
+        "name": "com.signature-theme/x420-mcp",
+        "before": 16440,
+        "after": 32219,
+        "exact": true
+      },
+      {
+        "name": "it.one2trip/one2trip",
+        "before": 22853,
+        "after": 7149,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-apple_developer",
-        "before": 14007,
-        "after": 75,
+        "before": 75,
+        "after": 14007,
+        "exact": true
+      },
+      {
+        "name": "biz.nibiashara/shelves",
+        "before": 11577,
+        "after": 24960,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-audience-resolver",
-        "before": 13427,
-        "after": 66,
+        "before": 66,
+        "after": 13427,
         "exact": true
       },
       {
-        "name": "app.apick/business",
-        "before": 45966,
-        "after": 59045,
+        "name": "io.github.christianclaudio/sigma",
+        "before": 45870,
+        "after": 58820,
         "exact": true
       },
       {
-        "name": "com.theaiworldnetwork/aifusionone",
-        "before": 16826,
-        "after": 29835,
+        "name": "io.github.christianclaudio/smartsheet-rm",
+        "before": 28756,
+        "after": 39790,
         "exact": true
       },
       {
-        "name": "com.alphacitation/reference",
-        "before": 1588,
-        "after": 14086,
+        "name": "net.homonia/homonia",
+        "before": 10535,
+        "after": 21542,
         "exact": true
       },
       {
-        "name": "io.github.yassinemohamedali/paperloo",
-        "before": 5300,
-        "after": 16902,
+        "name": "net.homonoia/homonoia",
+        "before": 10535,
+        "after": 21542,
         "exact": true
       },
       {
-        "name": "org.ripclip/ripclip",
-        "before": 26271,
-        "after": 36147,
+        "name": "com.mystarletter/human-design-chart",
+        "before": 383,
+        "after": 9171,
         "exact": true
       },
       {
-        "name": "com.gaents/api",
-        "before": 2083,
-        "after": 11129,
+        "name": "io.github.WYRE-AI/immybot-mcp",
+        "before": 199,
+        "after": 8837,
         "exact": true
       },
       {
-        "name": "io.github.aidatatools-dev/astro-agents",
-        "before": 28573,
-        "after": 19625,
+        "name": "com.usebrainchain/brainchain",
+        "before": 10820,
+        "after": 19099,
         "exact": true
       },
       {
-        "name": "com.word-flux/mcp",
-        "before": 25985,
-        "after": 34063,
+        "name": "ai.letsship/ship",
+        "before": 37717,
+        "after": 29677,
         "exact": true
       },
       {
-        "name": "io.github.cyanheads/gbif-biodiversity-mcp-server",
-        "before": 30498,
-        "after": 38174,
+        "name": "net.wanmi/domain-tools",
+        "before": 1741,
+        "after": 9765,
         "exact": true
       },
       {
-        "name": "ai.bittuitive.api/bittuitive",
-        "before": 19202,
-        "after": 11729,
+        "name": "io.github.ReplenishRadar/MCP",
+        "before": 9690,
+        "after": 17119,
         "exact": true
       },
       {
-        "name": "xyz.belfortagent/belfort-data",
-        "before": 6347,
-        "after": 13518,
+        "name": "com.completionkit/evals",
+        "before": 10787,
+        "after": 17966,
+        "exact": true
+      },
+      {
+        "name": "com.textforagents/textforagents",
+        "before": 2415,
+        "after": 9460,
+        "exact": true
+      },
+      {
+        "name": "com.apix402data/x402-data-api",
+        "before": 11053,
+        "after": 4035,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-apple_ads",
-        "before": 7093,
-        "after": 87,
+        "before": 87,
+        "after": 7093,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-lagos_life",
-        "before": 7064,
-        "after": 90,
+        "before": 90,
+        "after": 7064,
         "exact": true
       },
       {
-        "name": "io.github.ABCastor/borgo",
-        "before": 10170,
-        "after": 17120,
+        "name": "com.alphacitation/reference",
+        "before": 14086,
+        "after": 20941,
         "exact": true
       },
       {
-        "name": "channel.orbit/mcp",
-        "before": 1485,
-        "after": 8176,
+        "name": "com.satsdns/satsdns",
+        "before": 11011,
+        "after": 17659,
         "exact": true
       },
       {
-        "name": "io.github.unibio-intelligence/ubi",
-        "before": 881,
-        "after": 7497,
+        "name": "si.scriptura/scriptura",
+        "before": 1493,
+        "after": 8076,
         "exact": true
       },
       {
-        "name": "io.ddx.pg/archive",
-        "before": 30271,
-        "after": 23790,
+        "name": "com.idevice/wearables",
+        "before": 13442,
+        "after": 6930,
         "exact": true
       },
       {
-        "name": "io.github.lkopietz3-byte/honesty-mcp",
-        "before": 18769,
-        "after": 25021,
+        "name": "io.github.stackin-io/stackin",
+        "before": 17941,
+        "after": 24211,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-saas_studio",
-        "before": 6181,
-        "after": 89,
+        "before": 89,
+        "after": 6181,
         "exact": true
       },
       {
-        "name": "io.github.jameselle/sockodds-mcp",
-        "before": 2715,
-        "after": 8719,
-        "exact": true
-      },
-      {
-        "name": "io.github.siweina/dsh-novel-writer",
-        "before": 13333,
-        "after": 7417,
+        "name": "io.github.calligraphysystems/vibe-hardware-mcp",
+        "before": 17184,
+        "after": 11104,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-bgpt-chowdeck",
-        "before": 5931,
-        "after": 62,
+        "before": 62,
+        "after": 5931,
         "exact": true
       },
       {
-        "name": "com.jithox/jithox",
-        "before": 6715,
-        "after": 942,
+        "name": "io.github.NeoZorK/monte-neo",
+        "before": 13904,
+        "after": 19601,
         "exact": true
       },
       {
-        "name": "com.heistclips/heistclips",
-        "before": 1646,
-        "after": 7224,
+        "name": "com.vilmamonroy.a2a/defense-gateway",
+        "before": 7164,
+        "after": 12824,
+        "exact": true
+      },
+      {
+        "name": "io.github.Playpowerpolitics/powerplayers",
+        "before": 5006,
+        "after": 10595,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-bgpt-jiji-recon",
-        "before": 5506,
-        "after": 67,
+        "before": 67,
+        "after": 5506,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-browsergpt-browser-control",
-        "before": 5473,
-        "after": 83,
+        "before": 83,
+        "after": 5473,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-google_photos",
-        "before": 5455,
-        "after": 107,
+        "before": 107,
+        "after": 5455,
         "exact": true
       },
       {
-        "name": "ink.octopost/octopost",
-        "before": 24767,
-        "after": 30011,
-        "exact": true
-      },
-      {
-        "name": "io.github.cannergtfo-commits/blazarforce-polygon",
-        "before": 11296,
-        "after": 16395,
-        "exact": true
-      },
-      {
-        "name": "ai.guestlogic/guest-logic",
-        "before": 7917,
-        "after": 12990,
-        "exact": true
-      },
-      {
-        "name": "ai.guestlogic/hotel-pms",
-        "before": 7917,
-        "after": 12990,
-        "exact": true
-      },
-      {
-        "name": "io.github.useotterkit/otterkit",
-        "before": 3420,
-        "after": 8423,
+        "name": "io.github.AKzar1el/god-prompt-mcp",
+        "before": 3497,
+        "after": 8589,
         "exact": true
       },
       {
         "name": "co.civai.nova/mcp-bgpt-polymarket",
-        "before": 5031,
-        "after": 61,
+        "before": 61,
+        "after": 5031,
         "exact": true
       },
       {
-        "name": "io.github.smithdavedesign/botchelor",
-        "before": 21221,
-        "after": 16402,
+        "name": "com.noteboxd/mcp",
+        "before": 19681,
+        "after": 14721,
         "exact": true
       },
       {
-        "name": "io.github.Nativ-Technologies/nativ",
-        "before": 13890,
-        "after": 18574,
+        "name": "io.github.DreamwayChan/injection-process",
+        "before": 289,
+        "after": 5085,
         "exact": true
       },
       {
-        "name": "io.github.phalkmin/trendzeist-mcp",
-        "before": 2338,
-        "after": 6752,
+        "name": "re.parcellai/parcellaire",
+        "before": 19846,
+        "after": 15177,
         "exact": true
       },
       {
-        "name": "app.vercel.mare-liberum/sea",
-        "before": 3456,
-        "after": 7596,
+        "name": "io.github.christianclaudio/espn",
+        "before": 7878,
+        "after": 12291,
         "exact": true
       },
       {
-        "name": "dev.mareliberum/sea",
-        "before": 3456,
-        "after": 7596,
+        "name": "io.github.afnannuzulasugihartono/navego",
+        "before": 15724,
+        "after": 11334,
         "exact": true
       },
       {
-        "name": "com.vocalstack/mcp",
-        "before": 11076,
-        "after": 15029,
+        "name": "com.aiseewhy/aiseewhy",
+        "before": 2577,
+        "after": 6764,
         "exact": true
       },
       {
-        "name": "io.github.Sagargupta16/bedrock-multi-model-mcp",
-        "before": 5973,
-        "after": 9914,
+        "name": "io.github.WYRE-AI/blumira-mcp",
+        "before": 297,
+        "after": 4459,
         "exact": true
       },
       {
-        "name": "com.everysignal/everysignal",
-        "before": 3130,
-        "after": 6737,
+        "name": "io.github.stophydotdev/mcp",
+        "before": 7677,
+        "after": 3641,
         "exact": true
       },
       {
-        "name": "work.agentexchange/feeds",
-        "before": 7003,
-        "after": 10560,
+        "name": "com.hydrafetch/web",
+        "before": 6531,
+        "after": 10439,
         "exact": true
       },
       {
-        "name": "io.github.cuolm/swiss-weather-mcp",
-        "before": 6856,
-        "after": 10407,
+        "name": "software.brainiac/token-security",
+        "before": 2667,
+        "after": 6387,
+        "exact": true
+      },
+      {
+        "name": "ai.assistable/assistable",
+        "before": 4865,
+        "after": 8407,
+        "exact": true
+      },
+      {
+        "name": "software.brainiac/chain-data",
+        "before": 5212,
+        "after": 8741,
+        "exact": true
+      },
+      {
+        "name": "co.civai.nova/mcp-bgpt-cardpeer",
+        "before": 63,
+        "after": 3558,
+        "exact": true
+      },
+      {
+        "name": "io.github.WYRE-AI/atera-mcp",
+        "before": 307,
+        "after": 3802,
+        "exact": true
+      },
+      {
+        "name": "co.civai.nova/mcp-juicyway",
+        "before": 77,
+        "after": 3571,
+        "exact": true
+      },
+      {
+        "name": "com.agrodiler/catalog",
+        "before": 4136,
+        "after": 7609,
+        "exact": true
+      },
+      {
+        "name": "ai.peerfoundry/holdkit",
+        "before": 3343,
+        "after": 6714,
         "exact": true
       }
     ],
     "counts": {
-      "added": 1442,
-      "removed": 10,
-      "wentDown": 195,
-      "cameBack": 16,
-      "packagesDown": 20,
-      "packagesBack": 5,
-      "tokenChanges": 204
+      "added": 612,
+      "removed": 13,
+      "wentDown": 210,
+      "cameBack": 26,
+      "packagesDown": 18,
+      "packagesBack": 3,
+      "tokenChanges": 208
     }
   },
   "heaviest": [
@@ -6380,6 +6413,14 @@
       "claudeTokens": 1058829,
       "claudeTokensCc": 1065893,
       "host": "mcp.astroway.info"
+    },
+    {
+      "name": "io.github.ocean1547-ui/nspros-mcp-gateway",
+      "toolCount": 1857,
+      "toolsTokens": 633503,
+      "claudeTokens": 1056865,
+      "claudeTokensCc": 1086577,
+      "host": "mcp.nspros.ca"
     },
     {
       "name": "com.mcparmory/posthog",
@@ -6412,6 +6453,14 @@
       "claudeTokens": 973194,
       "claudeTokensCc": 1015194,
       "host": "getecoback.com"
+    },
+    {
+      "name": "io.github.f-tiger/ecoback-local-tools",
+      "toolCount": 2000,
+      "toolsTokens": 488525,
+      "claudeTokens": 973146,
+      "claudeTokensCc": 1001146,
+      "host": "github.com"
     },
     {
       "name": "co.ainumbers/tools",
@@ -6448,10 +6497,18 @@
     {
       "name": "net.crawlora/crawlora-mcp",
       "toolCount": 2000,
-      "toolsTokens": 367705,
-      "claudeTokens": 630841,
-      "claudeTokensCc": 656841,
+      "toolsTokens": 372502,
+      "claudeTokens": 638441,
+      "claudeTokensCc": 664441,
       "host": "mcp.crawlora.net"
+    },
+    {
+      "name": "io.github.hermoso-ai/hermoso-ads-manager",
+      "toolCount": 855,
+      "toolsTokens": 340772,
+      "claudeTokens": 598033,
+      "claudeTokensCc": 610858,
+      "host": "app.hermoso.ai"
     },
     {
       "name": "io.github.whiteknightonhorse/apibase",
@@ -6462,17 +6519,9 @@
       "host": "apibase.pro"
     },
     {
-      "name": "io.github.hermoso-ai/hermoso-ads-manager",
-      "toolCount": 815,
-      "toolsTokens": 326380,
-      "claudeTokens": 572957,
-      "claudeTokensCc": 585182,
-      "host": "app.hermoso.ai"
-    },
-    {
       "name": "io.github.nexscope/ecommerce",
       "toolCount": 937,
-      "toolsTokens": 314106,
+      "toolsTokens": 314104,
       "claudeTokens": 556098,
       "claudeTokensCc": 565468,
       "host": "api.nexscope.ai"
@@ -6488,9 +6537,9 @@
     {
       "name": "io.github.genmnz/jean",
       "toolCount": 351,
-      "toolsTokens": 265030,
-      "claudeTokens": 439581,
-      "claudeTokensCc": 442038,
+      "toolsTokens": 265043,
+      "claudeTokens": 439598,
+      "claudeTokensCc": 442055,
       "host": "jeanslabs.vercel.app"
     },
     {
@@ -6508,22 +6557,6 @@
       "claudeTokens": 425131,
       "claudeTokensCc": 431291,
       "host": "pypi.org"
-    },
-    {
-      "name": "io.github.Softeria/ms-365-mcp-server",
-      "toolCount": 203,
-      "toolsTokens": 245452,
-      "claudeTokens": 400838,
-      "claudeTokensCc": 403883,
-      "host": "npmjs.com"
-    },
-    {
-      "name": "io.github.Invaro/opentax",
-      "toolCount": 17,
-      "toolsTokens": 239662,
-      "claudeTokens": 397502,
-      "claudeTokensCc": 397638,
-      "host": "opentax.invaro.ai"
     }
   ]
 }
