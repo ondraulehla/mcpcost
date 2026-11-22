@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 
 /**
- * A D1 database in memory, over the SQLite of Node, with the site's own schema: prepare, bind, first, all and
+ * A D1 database in memory, over the SQLite of Node, with the site's own schema: prepare, bind, first, all, run and
  * batch, the part of the D1 API the board's queries use. It runs the same SQL as D1 does, so a test can hold
  * a query's answer byte for byte.
  */
@@ -19,6 +19,11 @@ class Statement {
 
   async first<T>(): Promise<T | null> {
     return (this.db.prepare(this.sql).get(...(this.params as SQLInputValue[])) as T | undefined) ?? null;
+  }
+
+  async run(): Promise<{ success: true }> {
+    this.db.prepare(this.sql).run(...(this.params as SQLInputValue[]));
+    return { success: true };
   }
 
   async all<T>(): Promise<{ results: T[] }> {

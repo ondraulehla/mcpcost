@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 // Rendered by the Worker, not prerendered: see methodology.astro. The page reads no data; the cache keeps it a day.
 Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=86400');
-const updated = '13 November 2026';
+const updated = '22 November 2026';
 ---
 
 <Layout title="Privacy policy" description="What mcpcost, its website, its API and its MCP server collect, why, who gets it and for how long. No accounts, no cookies, no advertising.">
@@ -21,7 +21,7 @@ const updated = '13 November 2026';
     <p>The MCP server has five tools. All of them read; none changes data. It needs no sign-in and it does not know who you are.</p>
     <dl class="facts">
       <dt>What it gets</dt><dd>The arguments of a tool call: a server name, search words, or the URL of an MCP server. It does not get your conversation, your prompts, your files or your memory. It asks for nothing more than a tool needs.</dd>
-      <dt>What it keeps</dt><dd>Nothing in its database. A tool call writes no row. The host's request log keeps the address of the request for some days (see “The host” below).</dd>
+      <dt>What it keeps</dt><dd>Counts for each day, and nothing about one call. Each request adds one to a count for the day, the name the client software gives (its <code>User-Agent</code> header and the client name in <code>initialize</code>), the kind of request and, for a tool call, the name of the tool. The server does not keep the arguments, the answer, your network address or the time of the call. It cuts an e-mail address out of a client name, and all browsers are one name. The host's request log keeps the address of the request for some days (see “The host” below).</dd>
       <dt>check_server</dt><dd>This tool, and the live check on the website, connects to the URL you give. It sends <code>initialize</code> and <code>tools/list</code> with the client name <code>mcpcost</code> and no credentials. The operator of that server sees a request from Cloudflare's network, not from you. To count tokens, the tool definitions that the server returns go to the token counting endpoint of Anthropic. That endpoint counts and does not run a model. Give only URLs of servers that are public.</dd>
       <dt>The answers</dt><dd>The answers hold data about MCP servers: status, tool names, token counts. They hold no data about you.</dd>
     </dl>

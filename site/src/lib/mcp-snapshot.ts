@@ -50,8 +50,9 @@ const result = (json: string) => new Response(json, { status: 200, headers: { 'C
 /**
  * The answer from the snapshot, or the request to hand to the SDK: the same request, or a copy with
  * the same body when the body was read here. The checks before the body are the SDK's own, in its order.
+ * seen gets the parsed body when this code read one, so the route can count the request (mcp-use.ts).
  */
-export async function fromSnapshot(request: Request): Promise<Response | Request> {
+export async function fromSnapshot(request: Request, seen?: (message: unknown) => void): Promise<Response | Request> {
   const accept = request.headers.get('accept');
   const type = request.headers.get('content-type');
   const length = request.headers.get('content-length');
@@ -67,6 +68,7 @@ export async function fromSnapshot(request: Request): Promise<Response | Request
   } catch {
     return copy();
   }
+  seen?.(m);
   if (!isObj(m)) return copy();
   if (isRequest(m) && m.method === 'initialize') {
     if (!initializeParams(m.params)) return copy();

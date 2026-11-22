@@ -59,7 +59,7 @@ const jsonld = {
     <p>The board probes each server of the <a href="https://registry.modelcontextprotocol.io" rel="noopener">official MCP registry</a> once a day: remote servers over the network, npm and PyPI package servers in a container. Token counts for Claude are exact, from the Anthropic <code>count_tokens</code> endpoint. Four tools read that data and connect to nothing. <span class="mono">check_server</span> connects to the URL you give, with no credentials, and waits 10 seconds at most. <a href="/methodology">How the probe works</a>.</p>
     <dl class="facts">
       <dt>Limits</dt><dd>Only public https URLs. No tool changes data, sends a message or spends money. Answers are JSON of a few kilobytes; a search page holds 20 servers at most.</dd>
-      <dt>Privacy</dt><dd>The server gets the arguments of a tool call and nothing else. It keeps nothing in its database. <a href="/privacy">Privacy policy</a>.</dd>
+      <dt>Privacy</dt><dd>The server gets the arguments of a tool call and nothing else. It keeps a count for each day by client name and tool, with no address and no arguments. <a href="/privacy">Privacy policy</a>.</dd>
       <dt>Support</dt><dd>Open an issue at <a href="https://github.com/ondraulehla/mcpcost/issues" rel="noopener">github.com/ondraulehla/mcpcost</a>. The source is there too, under the MIT licence.</dd>
     </dl>
   </section>

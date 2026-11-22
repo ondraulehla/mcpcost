@@ -117,6 +117,19 @@ CREATE TABLE IF NOT EXISTS tracked (
   ip_hash TEXT
 );
 
+-- Use of the board's own MCP server (/mcp), as counts for each UTC day: src/lib/mcp-use.ts adds one for each request.
+-- agent is the User-Agent header as a label, client the clientInfo.name of an initialize, tool the tool of a tools/call.
+-- No address, argument or time of day. The weekly report (edge/reach.mjs) reads it.
+CREATE TABLE IF NOT EXISTS mcp_use (
+  day TEXT NOT NULL,
+  agent TEXT NOT NULL,
+  client TEXT NOT NULL,
+  method TEXT NOT NULL,
+  tool TEXT NOT NULL,
+  count INTEGER NOT NULL,
+  PRIMARY KEY (day, agent, client, method, tool)
+) WITHOUT ROWID;
+
 CREATE TABLE IF NOT EXISTS hosts (
   host TEXT PRIMARY KEY,
   servers INTEGER NOT NULL,
