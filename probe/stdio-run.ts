@@ -17,7 +17,7 @@ import { priceTools } from '../packages/mcpcost/src/probe.js';
 import { probeStdioRaw } from '../packages/mcpcost/src/stdio.js';
 import type { RawTool } from '../packages/mcpcost/src/core.js';
 import { envNamesFromError } from '../packages/mcpcost/src/env-hints.js';
-import { classify, optionalEnvNames, placeholderEnv, sdkPin, withoutNames, type StdioStatus } from './stdio-classify.js';
+import { classify, fallbackEnvs, placeholderEnv, sdkPin, type StdioStatus } from './stdio-classify.js';
 import { shardOf } from './shard.js';
 
 const run = promisify(execFile);
@@ -245,7 +245,6 @@ async function probeOci(t: Target, row: Row): Promise<Row> {
   }
   row.installMs = Date.now() - t0;
   const env = placeholderEnv(t.pkg);
-  const optional = optionalEnvNames(t.pkg);
   const name = `mcpcost-${randomUUID().slice(0, 8)}`;
   try {
     const probeWith = async (vars: Record<string, string>) => {
@@ -266,12 +265,14 @@ async function probeOci(t: Target, row: Row): Promise<Row> {
         if (again.status === 'ok' || again.status !== attempt.status) attempt = again;
       }
     }
-    // A placeholder in a variable that the entry does not require can stop the server: once more without those.
+    // A placeholder can stop a server that checks its variables at start: once more without the optional ones, then
+    // with typed values (fallbackEnvs).
     let used = env;
-    if (attempt.status !== 'ok' && optional.length) {
-      const lean = withoutNames(env, optional);
-      const again = await probeWith(lean).catch(() => undefined);
-      if (again?.status === 'ok') { attempt = again; used = lean; }
+    if (attempt.status !== 'ok') {
+      for (const other of fallbackEnvs(t.pkg, env)) {
+        const again = await probeWith(other).catch(() => undefined);
+        if (again?.status === 'ok') { attempt = again; used = other; break; }
+      }
     }
     row.env = Object.keys(used);
     row.result = attempt.parsed.result;
@@ -361,8 +362,6 @@ async function probeOne(t: Target): Promise<Row> {
     row.command = command;
     const bundleEnv: Record<string, string> = 'env' in installed ? (installed as { env: Record<string, string> }).env : {};
     const env = { ...placeholderEnv(t.pkg), ...bundleEnv };
-    // The variables a client leaves unset; a value from the bundle's own manifest stays.
-    const optional = optionalEnvNames(t.pkg).filter((n) => !(n in bundleEnv));
     // 3. run with the network off, read-only install, then list the tools
     const probeWith = async (vars: Record<string, string>, workDir = dir, cmd = command) => {
       const envArgs = Object.entries(vars).flatMap(([k, v]) => ['-e', `${k}=${v}`]);
@@ -384,13 +383,22 @@ async function probeOne(t: Target): Promise<Row> {
         if (again.status === 'ok' || again.status !== attempt.status) attempt = again;
       }
     }
-    // A placeholder in a variable that the entry does not require can stop the server (a URL, a number or a JSON text
-    // that it checks at start): once more without those, as a client that sets only what the entry requires.
+    // A placeholder can stop a server that checks its variables at start (a URL, a number, a JSON text): once more
+    // without the variables that the entry does not require, then with typed values in the ones that stay. A value
+    // from the bundle's own manifest stays as it is.
     let used = env;
-    const lean = optional.length ? withoutNames(env, optional) : undefined;
-    if (attempt.status !== 'ok' && lean) {
-      const again = await probeWith(lean).catch(() => undefined);
-      if (again?.status === 'ok') { attempt = again; used = lean; }
+    const others = fallbackEnvs(t.pkg, env, bundleEnv);
+    /** The first of the other environments with which the server lists its tools. */
+    const firstOk = async (workDir?: string, cmd?: string[]) => {
+      for (const other of others) {
+        const again = await probeWith(other, workDir, cmd).catch(() => undefined);
+        if (again?.status === 'ok') return { again, other };
+      }
+      return undefined;
+    };
+    if (attempt.status !== 'ok') {
+      const hit = await firstOk();
+      if (hit) { attempt = hit.again; used = hit.other; }
     }
     // It stopped at the import of FastMCP from mcp 2.x: once more with mcp<2, in a fresh directory. When it lists its tools
     // then, the row says so (needs_old_sdk) with those tools and the error of the plain install. Anything else, and the
@@ -403,9 +411,9 @@ async function probeOne(t: Target): Promise<Row> {
         if (!('status' in pinned)) {
           const pinnedCommand = [...pinned.command, ...cliArgs];
           let again = await probeWith(env, pinnedDir, pinnedCommand);
-          if (again.status !== 'ok' && lean) {
-            const leanAgain = await probeWith(lean, pinnedDir, pinnedCommand).catch(() => undefined);
-            if (leanAgain?.status === 'ok') { again = leanAgain; used = lean; }
+          if (again.status !== 'ok') {
+            const hit = await firstOk(pinnedDir, pinnedCommand);
+            if (hit) { again = hit.again; used = hit.other; }
           }
           if (again.status === 'ok') attempt = { ...again, status: 'needs_old_sdk', text: attempt.text };
         }

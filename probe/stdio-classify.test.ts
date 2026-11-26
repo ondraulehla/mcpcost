@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { classify, optionalEnvNames, placeholderEnv, sdkPin, withoutNames } from './stdio-classify.js';
+import { classify, fallbackEnvs, optionalEnvNames, placeholderEnv, sdkPin, typedValue, withoutNames } from './stdio-classify.js';
 import { stderrSummary } from '../packages/mcpcost/src/stdio.js';
 
 const closed = 'MCP error -32000: Connection closed';
@@ -67,3 +67,60 @@ test('the second start keeps the required variables, the defaults and what the s
   const env = { ...placeholderEnv(pkg), ASKED_FOR: 'mcpcost-placeholder' };
   assert.deepEqual(withoutNames(env, optionalEnvNames(pkg)), { API_KEY: 'mcpcost-placeholder', REGION: 'eu', ASKED_FOR: 'mcpcost-placeholder' });
 });
+
+test('a value that the entry fixes is set as it is, and its variable is not optional', () => {
+  const pkg = { environmentVariables: [{ name: 'TRANSPORT', value: 'stdio' }, { name: 'SITE_URL', value: 'https://{tenant}.example.com' }] };
+  assert.deepEqual(placeholderEnv(pkg), { TRANSPORT: 'stdio', SITE_URL: 'mcpcost-placeholder' });
+  assert.deepEqual(optionalEnvNames(pkg), ['SITE_URL']);
+});
+
+test('a typed value has the shape that the variable expects', () => {
+  const v = (name: string, more: object = {}) => typedValue({ name, ...more });
+  // What the entry itself gives comes first.
+  assert.equal(v('MODE', { value: 'stdio', default: 'http' }), 'stdio');
+  assert.equal(v('DB_TYPE', { choices: ['mysql', 'postgresql'] }), 'mysql');
+  assert.equal(v('RECALL_DSN', { placeholder: 'postgresql://recall:recall@localhost:5432/recall' }), 'postgresql://recall:recall@localhost:5432/recall');
+  assert.equal(v('SYMBOLS', { placeholder: 'BTC,ETH' }), 'BTC,ETH');
+  // An example that is a sentence is not a value.
+  assert.equal(v('APP_SECRET', { placeholder: 'output of: openssl rand -base64 32', isSecret: true }), 'mcpcost-placeholder-secret');
+  // The format, with a default from the description when it names one.
+  assert.equal(v('MAX_PRICE_USD', { format: 'number', description: 'Per-purchase spend cap in USD. Default 0.50.' }), '0.50');
+  assert.equal(v('ORG_ID', { format: 'number', description: 'Organisation ID' }), '1');
+  assert.equal(v('SEND_FEEDBACK', { format: 'boolean', description: 'true or false' }), 'false');
+  assert.equal(v('SAFE_MODE', { format: 'boolean', description: 'Defaults to True.' }), 'true');
+  // A default that the description names: the case of HISTOR 0.10.0.
+  assert.equal(v('HISTOR_MCP_REMOTE', { description: 'Public HISTOR instance to query (default https://histor.modelmarket.dev). Pass --local to serve your own log.' }), 'https://histor.modelmarket.dev');
+  assert.equal(v('IMAP_PORT', { description: 'IMAP port. Defaults to 993.' }), '993');
+  // A name that says URL: the example of the description, else a URL that goes nowhere.
+  assert.equal(v('UNRAID_API_URL', { description: 'Base URL of your Unraid server, e.g. http://192.168.1.100.' }), 'http://192.168.1.100');
+  assert.equal(v('API_URL', { description: 'For example https://<your-host>/api' }), 'https://mcpcost-placeholder.invalid');
+  assert.equal(v('GOTIFY_URL'), 'https://mcpcost-placeholder.invalid');
+  // A path.
+  assert.equal(v('VAULT', { format: 'filepath' }), '/tmp/mcpcost-placeholder');
+  assert.equal(v('CONFIG_DIR'), '/tmp/mcpcost-placeholder');
+  // Nothing says what it is: the plain placeholder. A name with COUNT or ENABLED in it says nothing.
+  assert.equal(v('ACCOUNT_TOKEN', { isSecret: true }), 'mcpcost-placeholder-secret');
+  assert.equal(v('ENABLED_TOOLGROUPS', { description: 'Comma-separated tool groups to enable (readonly, write).' }), 'mcpcost-placeholder');
+});
+
+test('after a failed start: without the optional variables, then with typed values, and nothing twice', () => {
+  const pkg = { environmentVariables: [{ name: 'API_KEY', isRequired: true, isSecret: true }, { name: 'BASE_URL', isRequired: true }, { name: 'DEBUG' }] };
+  const env = placeholderEnv(pkg);
+  assert.deepEqual(fallbackEnvs(pkg, env), [
+    { API_KEY: 'mcpcost-placeholder-secret', BASE_URL: 'mcpcost-placeholder' },
+    { API_KEY: 'mcpcost-placeholder-secret', BASE_URL: 'https://mcpcost-placeholder.invalid' }
+  ]);
+  // Only optional variables: one more start. The typed one would be the same.
+  assert.deepEqual(fallbackEnvs({ environmentVariables: [{ name: 'REMOTE' }] }, { REMOTE: 'mcpcost-placeholder' }), [{}]);
+  // Nothing optional and nothing to type: no more starts.
+  assert.deepEqual(fallbackEnvs({ environmentVariables: [{ name: 'API_KEY', isRequired: true }] }, { API_KEY: 'mcpcost-placeholder' }), []);
+  assert.deepEqual(fallbackEnvs({}, {}), []);
+  // What the server asked for by name stays; a value from a bundle's manifest stays as it is.
+  const bundle = { environmentVariables: [{ name: 'DATA_DIR', isRequired: true }, { name: 'EXTRA' }] };
+  assert.deepEqual(fallbackEnvs(bundle, { DATA_DIR: '/bundle/data', EXTRA: 'from-manifest', ASKED_FOR: 'mcpcost-placeholder' }, { DATA_DIR: '/bundle/data', EXTRA: 'from-manifest' }), []);
+  assert.deepEqual(fallbackEnvs(bundle, { DATA_DIR: 'mcpcost-placeholder', EXTRA: 'mcpcost-placeholder', ASKED_FOR: 'mcpcost-placeholder' }), [
+    { DATA_DIR: 'mcpcost-placeholder', ASKED_FOR: 'mcpcost-placeholder' },
+    { DATA_DIR: '/tmp/mcpcost-placeholder', ASKED_FOR: 'mcpcost-placeholder' }
+  ]);
+});
+

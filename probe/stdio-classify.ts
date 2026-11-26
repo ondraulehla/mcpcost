@@ -7,29 +7,88 @@
  */
 import type { ProbeResult, RegistryPackage } from '../packages/mcpcost/src/index.js';
 
-type Listed = Pick<RegistryPackage, 'environmentVariables'>;
+/** A variable of a registry entry, with the keys of the registry's schema that the package's own type leaves out. */
+type EnvVar = NonNullable<RegistryPackage['environmentVariables']>[number] & { value?: string; choices?: string[]; format?: string; placeholder?: string };
+type Listed = { environmentVariables?: EnvVar[] };
 
-/** Placeholder values for the environment the registry entry lists, so the server starts and lists its tools. */
+const PLAIN = 'mcpcost-placeholder';
+/** A value the entry fixes for every user, such as TRANSPORT=stdio. One with a {variable} in it is not a value yet. */
+const fixedValue = (v: EnvVar): string | undefined => (v.value != null && !String(v.value).includes('{') ? String(v.value) : undefined);
+
+/**
+ * The environment of the first start: the value the entry fixes, else its default, else a placeholder, for every
+ * variable the entry lists. Most servers read a variable only when a tool runs, so they start and list their tools.
+ */
 export function placeholderEnv(pkg: Listed): Record<string, string> {
   const env: Record<string, string> = {};
-  for (const v of pkg.environmentVariables ?? []) env[v.name] = v.default ?? (v.isSecret ? 'mcpcost-placeholder-secret' : 'mcpcost-placeholder');
+  for (const v of pkg.environmentVariables ?? []) env[v.name] = fixedValue(v) ?? v.default ?? (v.isSecret ? `${PLAIN}-secret` : PLAIN);
   return env;
 }
 
 /**
- * The listed variables that the entry does not require and gives no default for. A client leaves them unset. A
- * placeholder in one of them can stop a server that checks the value at start: a URL, a number, a JSON text or one
- * of a set of names. The maintainer of io.github.alexar76/histor reported it on 2026-11-26: with HISTOR_MCP_REMOTE
- * set to the placeholder the launcher printed its usage and the board said "needs args". The probe starts such a
- * server once more without these variables when the start with placeholders fails.
+ * The listed variables that the entry does not require and gives no value or default for. A client leaves them
+ * unset. A placeholder in one of them can stop a server that checks the value at start: a URL, a number, a JSON text
+ * or one of a set of names. The maintainer of io.github.alexar76/histor reported it on 2026-11-26: with
+ * HISTOR_MCP_REMOTE set to the placeholder the launcher printed its usage and the board said "needs args".
  */
 export function optionalEnvNames(pkg: Listed): string[] {
-  return (pkg.environmentVariables ?? []).filter((v) => !v.isRequired && v.default == null).map((v) => v.name);
+  return (pkg.environmentVariables ?? []).filter((v) => !v.isRequired && v.default == null && fixedValue(v) == null).map((v) => v.name);
 }
 
 /** An environment without the named variables. */
 export function withoutNames(env: Record<string, string>, names: string[]): Record<string, string> {
   return Object.fromEntries(Object.entries(env).filter(([name]) => !names.includes(name)));
+}
+
+const URL_IN_TEXT = /\b[a-z][a-z0-9+.-]*:\/\/[^\s"'`)>,\]]+/i;
+/** "default https://api.example.com", "Defaults to 993", "Default: true". */
+const NAMED_DEFAULT = /\bdefaults?(?:\s+(?:is|to|value(?:\s+is)?))?\s*[:=]?\s*["'`]?([^\s"'`),;]+)/i;
+const URL_NAME = /(URL|URI|ENDPOINT|API_BASE|ORIGIN)$/i;
+const PATH_NAME = /_(PATH|DIR|FILE|ROOT|HOME|FOLDER|DIRECTORY)$/i;
+const NUMBER = /^-?\d+(\.\d+)?$/;
+const BOOLEAN = /^(true|false)$/i;
+const trimmed = (text: string) => text.replace(/[.,;:]+$/, '');
+/** A URL that a parser takes, with no <host> or {tenant} left in it. */
+const usableUrl = (text: string | undefined): string | undefined => (text && !/[<>{}]/.test(text) && URL.canParse(text) ? text : undefined);
+
+/**
+ * A value of the kind a variable expects, for a server that checks its variables at start and stops on plain text.
+ * In order: the value the entry fixes, its default, its first choice, the publisher's own example (the registry's
+ * "placeholder" key), then what the format, the description and the name say: a number, true or false, a default
+ * that the description names, a URL, a path. The last resort is the plain placeholder. The container has no network
+ * at start, so a URL here is never called.
+ */
+export function typedValue(v: EnvVar): string {
+  const fixed = fixedValue(v) ?? v.default ?? v.choices?.[0];
+  if (fixed != null) return String(fixed);
+  if (v.placeholder && !/\s/.test(v.placeholder)) return v.placeholder;
+  const text = v.description ?? '';
+  const named = trimmed(NAMED_DEFAULT.exec(text)?.[1] ?? '');
+  if (v.format === 'number') return NUMBER.test(named) ? named : '1';
+  if (v.format === 'boolean') return BOOLEAN.test(named) ? named.toLowerCase() : 'false';
+  if (NUMBER.test(named) || BOOLEAN.test(named)) return named;
+  const namedUrl = usableUrl(named);
+  if (namedUrl) return namedUrl;
+  if (URL_NAME.test(v.name)) return usableUrl(trimmed(URL_IN_TEXT.exec(text)?.[0] ?? '')) ?? `https://${PLAIN}.invalid`;
+  if (v.format === 'filepath' || PATH_NAME.test(v.name)) return `/tmp/${PLAIN}`;
+  return v.isSecret ? `${PLAIN}-secret` : PLAIN;
+}
+
+/**
+ * The environments for the starts after a failed first one, in order, each tried until one lists the tools:
+ * 1. without the optional variables, as a client that sets only what the entry requires,
+ * 2. the same, with a typed value in each variable that stays (typedValue).
+ * env is the environment of the first start with what the server asked for by name; keep holds values that no start
+ * changes (the manifest of an MCPB bundle). An environment that was tried already is left out.
+ */
+export function fallbackEnvs(pkg: Listed, env: Record<string, string>, keep: Record<string, string> = {}): Array<Record<string, string>> {
+  const optional = optionalEnvNames(pkg).filter((n) => !(n in keep));
+  const lean = withoutNames(env, optional);
+  const typed = { ...lean };
+  for (const v of pkg.environmentVariables ?? []) if (v.name in lean && !(v.name in keep)) typed[v.name] = typedValue(v);
+  const key = (e: Record<string, string>) => JSON.stringify(Object.entries(e).sort(([a], [b]) => a.localeCompare(b)));
+  const seen = new Set([key(env)]);
+  return [lean, typed].filter((e) => !seen.has(key(e)) && seen.add(key(e)));
 }
 
 export type StdioStatus = ProbeResult['status'] | 'install_failed' | 'no_bin' | 'needs_env' | 'needs_args' | 'needs_network' | 'needs_old_sdk' | 'crashed';
