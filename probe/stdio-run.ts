@@ -17,7 +17,7 @@ import { priceTools } from '../packages/mcpcost/src/probe.js';
 import { probeStdioRaw } from '../packages/mcpcost/src/stdio.js';
 import type { RawTool } from '../packages/mcpcost/src/core.js';
 import { envNamesFromError } from '../packages/mcpcost/src/env-hints.js';
-import { classify, sdkPin, type StdioStatus } from './stdio-classify.js';
+import { classify, optionalEnvNames, placeholderEnv, sdkPin, withoutNames, type StdioStatus } from './stdio-classify.js';
 import { shardOf } from './shard.js';
 
 const run = promisify(execFile);
@@ -141,13 +141,6 @@ function buildArgs(pkg: RegistryPackage): { args: string[]; missing: string[] } 
   return { args: out, missing };
 }
 
-/** Placeholder values for the environment the server expects, so it starts and lists its tools. */
-function buildEnv(pkg: RegistryPackage): Record<string, string> {
-  const env: Record<string, string> = {};
-  for (const v of pkg.environmentVariables ?? []) env[v.name] = v.default ?? (v.isSecret ? 'mcpcost-placeholder-secret' : 'mcpcost-placeholder');
-  return env;
-}
-
 function dockerArgs(extra: string[]): string[] {
   return ['run', '--rm', '--memory', '512m', '--cpus', '1', '--pids-limit', '256', '--security-opt', 'no-new-privileges', ...extra];
 }
@@ -251,7 +244,8 @@ async function probeOci(t: Target, row: Row): Promise<Row> {
     return row;
   }
   row.installMs = Date.now() - t0;
-  const env = buildEnv(t.pkg);
+  const env = placeholderEnv(t.pkg);
+  const optional = optionalEnvNames(t.pkg);
   const name = `mcpcost-${randomUUID().slice(0, 8)}`;
   try {
     const probeWith = async (vars: Record<string, string>) => {
@@ -272,7 +266,14 @@ async function probeOci(t: Target, row: Row): Promise<Row> {
         if (again.status === 'ok' || again.status !== attempt.status) attempt = again;
       }
     }
-    row.env = Object.keys(env);
+    // A placeholder in a variable that the entry does not require can stop the server: once more without those.
+    let used = env;
+    if (attempt.status !== 'ok' && optional.length) {
+      const lean = withoutNames(env, optional);
+      const again = await probeWith(lean).catch(() => undefined);
+      if (again?.status === 'ok') { attempt = again; used = lean; }
+    }
+    row.env = Object.keys(used);
     row.result = attempt.parsed.result;
     row.tools = attempt.parsed.tools;
     row.status = attempt.status;
@@ -359,7 +360,9 @@ async function probeOne(t: Target): Promise<Row> {
     const command = [...installed.command, ...cliArgs];
     row.command = command;
     const bundleEnv: Record<string, string> = 'env' in installed ? (installed as { env: Record<string, string> }).env : {};
-    const env = { ...buildEnv(t.pkg), ...bundleEnv };
+    const env = { ...placeholderEnv(t.pkg), ...bundleEnv };
+    // The variables a client leaves unset; a value from the bundle's own manifest stays.
+    const optional = optionalEnvNames(t.pkg).filter((n) => !(n in bundleEnv));
     // 3. run with the network off, read-only install, then list the tools
     const probeWith = async (vars: Record<string, string>, workDir = dir, cmd = command) => {
       const envArgs = Object.entries(vars).flatMap(([k, v]) => ['-e', `${k}=${v}`]);
@@ -381,6 +384,14 @@ async function probeOne(t: Target): Promise<Row> {
         if (again.status === 'ok' || again.status !== attempt.status) attempt = again;
       }
     }
+    // A placeholder in a variable that the entry does not require can stop the server (a URL, a number or a JSON text
+    // that it checks at start): once more without those, as a client that sets only what the entry requires.
+    let used = env;
+    const lean = optional.length ? withoutNames(env, optional) : undefined;
+    if (attempt.status !== 'ok' && lean) {
+      const again = await probeWith(lean).catch(() => undefined);
+      if (again?.status === 'ok') { attempt = again; used = lean; }
+    }
     // It stopped at the import of FastMCP from mcp 2.x: once more with mcp<2, in a fresh directory. When it lists its tools
     // then, the row says so (needs_old_sdk) with those tools and the error of the plain install. Anything else, and the
     // plain install's crash stands.
@@ -390,14 +401,19 @@ async function probeOne(t: Target): Promise<Row> {
         pinnedDir = await mkdtemp(join(tmpdir(), 'mcpcost-stdio-'));
         const pinned = await install(t, pinnedDir, [pin]);
         if (!('status' in pinned)) {
-          const again = await probeWith(env, pinnedDir, [...pinned.command, ...cliArgs]);
+          const pinnedCommand = [...pinned.command, ...cliArgs];
+          let again = await probeWith(env, pinnedDir, pinnedCommand);
+          if (again.status !== 'ok' && lean) {
+            const leanAgain = await probeWith(lean, pinnedDir, pinnedCommand).catch(() => undefined);
+            if (leanAgain?.status === 'ok') { again = leanAgain; used = lean; }
+          }
           if (again.status === 'ok') attempt = { ...again, status: 'needs_old_sdk', text: attempt.text };
         }
       } catch {
         // The second run timed out or gave no answer: the crash of the plain install stands.
       }
     }
-    row.env = Object.keys(env);
+    row.env = Object.keys(used);
     row.result = attempt.parsed.result;
     row.tools = attempt.parsed.tools;
     row.status = attempt.status;

@@ -5,7 +5,32 @@
  * set is a package that wants setup (needs_env), even when Python prints it as a traceback. No side effects, so the
  * tests can import it; probe/stdio-run.ts uses it for npm, PyPI, OCI and MCPB alike.
  */
-import type { ProbeResult } from '../packages/mcpcost/src/index.js';
+import type { ProbeResult, RegistryPackage } from '../packages/mcpcost/src/index.js';
+
+type Listed = Pick<RegistryPackage, 'environmentVariables'>;
+
+/** Placeholder values for the environment the registry entry lists, so the server starts and lists its tools. */
+export function placeholderEnv(pkg: Listed): Record<string, string> {
+  const env: Record<string, string> = {};
+  for (const v of pkg.environmentVariables ?? []) env[v.name] = v.default ?? (v.isSecret ? 'mcpcost-placeholder-secret' : 'mcpcost-placeholder');
+  return env;
+}
+
+/**
+ * The listed variables that the entry does not require and gives no default for. A client leaves them unset. A
+ * placeholder in one of them can stop a server that checks the value at start: a URL, a number, a JSON text or one
+ * of a set of names. The maintainer of io.github.alexar76/histor reported it on 2026-11-26: with HISTOR_MCP_REMOTE
+ * set to the placeholder the launcher printed its usage and the board said "needs args". The probe starts such a
+ * server once more without these variables when the start with placeholders fails.
+ */
+export function optionalEnvNames(pkg: Listed): string[] {
+  return (pkg.environmentVariables ?? []).filter((v) => !v.isRequired && v.default == null).map((v) => v.name);
+}
+
+/** An environment without the named variables. */
+export function withoutNames(env: Record<string, string>, names: string[]): Record<string, string> {
+  return Object.fromEntries(Object.entries(env).filter(([name]) => !names.includes(name)));
+}
 
 export type StdioStatus = ProbeResult['status'] | 'install_failed' | 'no_bin' | 'needs_env' | 'needs_args' | 'needs_network' | 'needs_old_sdk' | 'crashed';
 

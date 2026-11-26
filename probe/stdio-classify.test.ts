@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { classify, sdkPin } from './stdio-classify.js';
+import { classify, optionalEnvNames, placeholderEnv, sdkPin, withoutNames } from './stdio-classify.js';
 import { stderrSummary } from '../packages/mcpcost/src/stdio.js';
 
 const closed = 'MCP error -32000: Connection closed';
@@ -45,4 +45,25 @@ test('the summary keeps the exception line and the first error of Node, not the 
   const summary = stderrSummary(`Error: OPENAI_API_KEY is not set\n${frames}`);
   assert.match(summary.split('\n')[0], /^Error: OPENAI_API_KEY is not set/);
   assert.ok(summary.length <= 600);
+});
+
+test('every listed variable gets a value: its default, else a placeholder', () => {
+  const pkg = { environmentVariables: [{ name: 'API_KEY', isRequired: true, isSecret: true }, { name: 'REGION', default: 'eu' }, { name: 'REMOTE' }] };
+  assert.deepEqual(placeholderEnv(pkg), { API_KEY: 'mcpcost-placeholder-secret', REGION: 'eu', REMOTE: 'mcpcost-placeholder' });
+  assert.deepEqual(placeholderEnv({}), {});
+});
+
+test('a variable that is not required and has no default is one a client leaves unset', () => {
+  // The entry of io.github.alexar76/histor 0.10.0: one variable, no isRequired, no default. Its launcher wants a URL in it.
+  assert.deepEqual(optionalEnvNames({ environmentVariables: [{ name: 'HISTOR_MCP_REMOTE', description: 'Public HISTOR instance to query' }] }), ['HISTOR_MCP_REMOTE']);
+  // 0.11.0 gives a default, so the variable keeps that value in both starts.
+  assert.deepEqual(optionalEnvNames({ environmentVariables: [{ name: 'HISTOR_MCP_REMOTE', default: 'https://histor.modelmarket.dev' }] }), []);
+  assert.deepEqual(optionalEnvNames({ environmentVariables: [{ name: 'API_KEY', isRequired: true }, { name: 'DEBUG', isRequired: false }] }), ['DEBUG']);
+  assert.deepEqual(optionalEnvNames({}), []);
+});
+
+test('the second start keeps the required variables, the defaults and what the server asked for', () => {
+  const pkg = { environmentVariables: [{ name: 'API_KEY', isRequired: true }, { name: 'REGION', default: 'eu' }, { name: 'REMOTE' }] };
+  const env = { ...placeholderEnv(pkg), ASKED_FOR: 'mcpcost-placeholder' };
+  assert.deepEqual(withoutNames(env, optionalEnvNames(pkg)), { API_KEY: 'mcpcost-placeholder', REGION: 'eu', ASKED_FOR: 'mcpcost-placeholder' });
 });

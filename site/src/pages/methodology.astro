@@ -104,7 +104,7 @@ Astro.response.headers.set('cache-control', 'public, max-age=3600, s-maxage=8640
   <section class="panel" aria-labelledby="retries-h">
     <h2 id="retries-h" class="panel-title">Second attempts</h2>
     <p>
-      A server that times out but answered in the previous run gets a second, slower attempt at the end of the run, so a fault on our side does not show as an outage. A package server that exits asking for a variable is started once more with that variable set to a placeholder.
+      A server that times out but answered in the previous run gets a second, slower attempt at the end of the run, so a fault on our side does not show as an outage. A package server that exits asking for a variable is started once more with that variable set to a placeholder. A package server that does not start with placeholders is started once more without the variables that its entry does not require: a placeholder in an optional variable, where the server expects a URL or a number, can stop it.
     </p>
   </section>
 
