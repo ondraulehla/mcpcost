@@ -1,6 +1,6 @@
 # mcpcost
 
-[![CI](https://github.com/ondraulehla/mcpcost/actions/workflows/ci.yml/badge.svg)](https://github.com/ondraulehla/mcpcost/actions/workflows/ci.yml) [![npm mcpcost](https://img.shields.io/npm/v/mcpcost?label=mcpcost)](https://www.npmjs.com/package/mcpcost) [![license](https://img.shields.io/github/license/ondraulehla/mcpcost)](LICENSE) [![Glama](https://glama.ai/mcp/servers/ondraulehla/mcpcost/badges/score.svg)](https://glama.ai/mcp/servers/ondraulehla/mcpcost)
+[![CI](https://github.com/ondraulehla/mcpcost/actions/workflows/ci.yml/badge.svg)](https://github.com/ondraulehla/mcpcost/actions/workflows/ci.yml) [![npm mcpcost](https://img.shields.io/npm/v/mcpcost?label=mcpcost)](https://www.npmjs.com/package/mcpcost) [![license](https://img.shields.io/github/license/ondraulehla/mcpcost)](LICENSE) [![Glama](https://glama.ai/mcp/servers/ondraulehla/mcpcost/badges/score.svg)](https://glama.ai/mcp/servers/ondraulehla/mcpcost) [![mcpcost MCP connector](https://glama.ai/mcp/connectors/io.github.ondraulehla/mcpcost/badges/score.svg)](https://glama.ai/mcp/connectors/io.github.ondraulehla/mcpcost)
 
 **Is that MCP server alive, and what does it cost your context window?**
 
